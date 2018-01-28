@@ -23,23 +23,16 @@ class ApiController extends ActiveController
      */
     private function canRequest()
     {
+        if (\Yii::$app->request->method !== 'POST') {
+            throw new \Exception('Invalid request method');
+        }
+
         $userIp = \Yii::$app->request->getUserIP();
+
         // в списке фронтендов поищим с этим ip
-//        if (!isset(\Yii::$app->params['frontends'][$userIp])) {
-//            throw new \Exception('Frontend server not found');
-//        }
-        // TODO authCode должен передаваться в зафишрованном виде, а тут расфировываться.
-        // TODO возможно шифровать надо всю посылку
-        // проверим authCode
-        // TODO раскоментить потом
-//        $authCode = \Yii::$app->request->get('authCode');
-//        if ($authCode === null) {
-//            throw new \Exception('authCode not found');
-//        }
-//
-//        if (\Yii::$app->params['frontends']['authCode'] !== $authCode) {
-//            throw new \Exception('Invalid authCode');
-//        }
+        if (!isset(\Yii::$app->params['cdn']['frontends'][$userIp])) {
+            throw new \Exception('Frontend server not found');
+        }
     }
     /**
      * Установка статуса
