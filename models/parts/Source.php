@@ -7,7 +7,9 @@
  */
 namespace app\models\parts;
 
+use app\helpers\Calculate;
 use app\models\Image;
+use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Imagick\Imagine;
 
@@ -17,10 +19,27 @@ use Imagine\Imagick\Imagine;
  */
 class Source {
 
+    public static $sourceSizes = [];
+
+    /**
+     * @param $sourcePath
+     * @return \Imagine\Image\ImageInterface|\Imagine\Imagick\Image
+     */
     public static function create($sourcePath)
     {
         /** @var Imagine $imagine */
         $imagine = Image::$image;
-        return $imagine->open($sourcePath);
+
+        $image = $imagine->open($sourcePath);
+
+        Calculate::getSourceSizes([
+            'width' => $image->getSize()->getWidth(),
+            'height' => $image->getSize()->getHeight()
+        ], [
+            'width' => Image::$format['width'],
+            'height' => Image::$format['height']
+        ]);
+
+        return $image->resize(new Box(Calculate::$params['width'], Calculate::$params['height']));
     }
 }

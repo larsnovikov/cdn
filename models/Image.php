@@ -7,6 +7,7 @@
  */
 
 namespace app\models;
+use app\helpers\Calculate;
 use app\models\parts\Palette;
 use app\models\parts\Source;
 use Imagine\Gd\Imagine;
@@ -37,7 +38,7 @@ class Image
      */
     public static $source = null;
 
-    public $format = [];
+    public static $format = [];
 
     /**
      * Image constructor.
@@ -47,7 +48,7 @@ class Image
     public function __construct($source, $format)
     {
         $this->sourcePath = \Yii::$app->params['cdn']['inputPath'] . DIRECTORY_SEPARATOR . $source;
-        $this->format = $format;
+        self::$format = $format;
 
         self::$image = new Imagine();
 
@@ -63,8 +64,8 @@ class Image
     public function build()
     {
         $filePath = \Yii::$app->params['cdn']['outputPath'] . DIRECTORY_SEPARATOR . time() . '_' . rand(0, 999) . '.jpg';
-        $collage = self::$image->create(new Box(1000, 1000), Image::$palette);
-        self::$image = $collage->paste( self::$source, new Point(0, 0))
+        $collage = self::$image->create(new Box(self::$format['width'], self::$format['height']), Image::$palette);
+        self::$image = $collage->paste( self::$source, new Point(Calculate::$params['left_margin'], Calculate::$params['top_margin']))
             ->save($filePath);
 
         return $filePath;
@@ -75,7 +76,7 @@ class Image
      */
     public function afterExecution()
     {
-        if (array_key_exists('remove_source', $this->format) && $this->format['remove_source']) {
+        if (array_key_exists('remove_source', self::$format) && self::$format['remove_source']) {
             unlink($this->sourcePath);
         } else {
             // TODO тут по идее должен быть перенос в хранилище

@@ -28,7 +28,9 @@ class UploadValidator
      *         'width' => 150,
      *         'background' => [
      *             'color' => '000'
-     *         ]
+     *         ],
+     *         'maximize' => 'mode_1',
+     *         'minimaze' => 'mode_2'
      *     ],
      *     'medium' => [
      *         'name' => 'medium',
@@ -36,7 +38,9 @@ class UploadValidator
      *         'width' => 400,
      *         'background' => [
      *             'color' => '000'
-     *         ]
+     *         ],
+     *         'maximize' => 'mode_2',
+     *         'minimaze' => 'mode_1'
      *     ]
      * ]
      * @param $formats
