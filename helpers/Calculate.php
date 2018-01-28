@@ -31,10 +31,44 @@ class Calculate
     {
         if ($from['width'] > $to['width'] && $from['height'] > $to['height']) {
             // minimaze image
+            self::minimaze($from, $to);
         } elseif ($from['width']< $to['width'] && $from['height'] < $to['height']) {
             // maximize image
+            self::maximize($from, $to);
         } else {
 
         }
+
+        self::margins($to);
+    }
+
+    private static function margins($to)
+    {
+        self::$params['top_margin'] = ($to['height'] - self::$params['height'])/2;
+        self::$params['left_margin'] = ($to['width'] - self::$params['width'])/2;
+    }
+
+    private static function minimaze($from, $to)
+    {
+        // должна влезти и щирина и высота
+        // определим базовую сторону
+        $coefFrom = $from['width']/$from['height'];
+        $coefTo = $to['width']/$to['height'];
+
+        if ($coefFrom > $coefTo) {
+            $height = $to['width'] / $coefFrom;
+            self::$params['width'] = $to['width'];
+            self::$params['height'] = $height;
+        } else {
+            $width = ceil($to['height'] * $coefFrom);
+            self::$params['width'] = $width;
+            self::$params['height'] = $to['height'];
+        }
+    }
+
+    private static function maximize($from, $to)
+    {
+        self::$params['width'] = $from['width'];
+        self::$params['height'] = $from['height'];
     }
 }

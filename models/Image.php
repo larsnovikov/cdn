@@ -48,10 +48,9 @@ class Image
     public function __construct($source, $format)
     {
         $this->sourcePath = \Yii::$app->params['cdn']['inputPath'] . DIRECTORY_SEPARATOR . $source;
+
         self::$format = $format;
-
         self::$image = new Imagine();
-
         self::$palette = Palette::create($format);
         self::$source = Source::create($this->sourcePath);
     }
@@ -65,7 +64,7 @@ class Image
     {
         $filePath = \Yii::$app->params['cdn']['outputPath'] . DIRECTORY_SEPARATOR . time() . '_' . rand(0, 999) . '.jpg';
         $collage = self::$image->create(new Box(self::$format['width'], self::$format['height']), Image::$palette);
-        self::$image = $collage->paste( self::$source, new Point(Calculate::$params['left_margin'], Calculate::$params['top_margin']))
+        self::$image = $collage->paste(self::$source, new Point(Calculate::$params['left_margin'], Calculate::$params['top_margin']))
             ->save($filePath);
 
         return $filePath;
