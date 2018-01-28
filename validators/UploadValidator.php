@@ -27,15 +27,15 @@ class UploadValidator
      *         'height' => 100,
      *         'width' => 150,
      *         'background' => [
-     *             'color' => [255, 255, 260]
+     *             'color' => '000'
      *         ]
      *     ],
-     *     'mediun' => [
+     *     'medium' => [
      *         'name' => 'medium',
      *         'height' => 300,
      *         'width' => 400,
      *         'background' => [
-     *             'color' => [0, 0, 260]
+     *             'color' => '000'
      *         ]
      *     ]
      * ]
