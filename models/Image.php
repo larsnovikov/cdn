@@ -7,7 +7,11 @@
  */
 
 namespace app\models;
+use app\models\parts\Palette;
+use app\models\parts\Source;
 use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
 
 /**
  * Class Image
@@ -21,14 +25,19 @@ class Image
     public $sourcePath = null;
 
     /**
-     * @var null
+     * @var Imagine|null
      */
     public static $image = null;
-
     /**
-     * @var null
+     * @var \Imagine\Gd\Image|\Imagine\Image\ImageInterface|null
      */
-    public $filePath = null;
+    public static $palette = null;
+    /**
+     * @var \Imagine\Image\ImageInterface|\Imagine\Imagick\Image|null
+     */
+    public static $source = null;
+
+    public $format = [];
 
     /**
      * Image constructor.
@@ -38,18 +47,38 @@ class Image
     public function __construct($source, $format)
     {
         $this->sourcePath = \Yii::$app->params['cdn']['inputPath'] . DIRECTORY_SEPARATOR . $source;
+        $this->format = $format;
+
         self::$image = new Imagine();
-        self::$image = Background::createBackground($format);
+
+        self::$palette = Palette::create($format);
+        self::$source = Source::create($this->sourcePath);
     }
 
-    public function saveImage()
+    /**
+     * Сборщик
+     *
+     * @return string
+     */
+    public function build()
     {
-        $this->filePath = \Yii::$app->params['cdn']['outputPath'] . DIRECTORY_SEPARATOR . time() . '_' . rand(0, 999) . '.jpg';
-        self::$image->save($this->filePath);
+        $filePath = \Yii::$app->params['cdn']['outputPath'] . DIRECTORY_SEPARATOR . time() . '_' . rand(0, 999) . '.jpg';
+        $collage = self::$image->create(new Box(1000, 1000), Image::$palette);
+        self::$image = $collage->paste( self::$source, new Point(0, 0))
+            ->save($filePath);
+
+        return $filePath;
     }
 
-    public function getFilePath()
+    /**
+     * Выполнение после обработки
+     */
+    public function afterExecution()
     {
-        return $this->filePath;
+        if (array_key_exists('remove_source', $this->format) && $this->format['remove_source']) {
+            unlink($this->sourcePath);
+        } else {
+            // TODO тут по идее должен быть перенос в хранилище
+        }
     }
 }

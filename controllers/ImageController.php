@@ -30,8 +30,8 @@ class ImageController extends ApiController
 
         foreach ($formats as $format) {
             $image = new Image($request['source'], $format);
-            $image->saveImage();
-            $out[$format['name']] = $image->getFilePath();
+            $out[$format['name']] = $image->build();
+            $image->afterExecution();
         }
 
         return $out;
