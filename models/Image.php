@@ -62,7 +62,7 @@ class Image
      */
     public function build()
     {
-        $filePath = \Yii::$app->params['cdn']['outputPath'] . DIRECTORY_SEPARATOR . time() . '_' . rand(0, 999) . '.jpg';
+        $filePath = Storage::chooseStorage() .DIRECTORY_SEPARATOR. time() . '_' . rand(0, 999) . '.jpg';
         $collage = self::$image->create(new Box(self::$format['width'], self::$format['height']), Image::$palette);
         self::$image = $collage->paste(self::$source, new Point(Calculate::$params['left_margin'], Calculate::$params['top_margin']))
             ->save($filePath);

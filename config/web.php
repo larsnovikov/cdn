@@ -47,9 +47,9 @@ $config = [
             ],
         ],
         'db' => $db,
-        'response' => [
-            'format' => yii\web\Response::FORMAT_JSON
-        ],
+//        'response' => [
+//            'format' => yii\web\Response::FORMAT_JSON
+//        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
