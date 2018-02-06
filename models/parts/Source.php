@@ -32,7 +32,7 @@ class Source {
 
         $image = $imagine->open($sourcePath);
 
-        Calculate::getSourceSizes([
+        Calculate::setSourceSizes([
             'width' => $image->getSize()->getWidth(),
             'height' => $image->getSize()->getHeight()
         ], [
@@ -40,6 +40,10 @@ class Source {
             'height' => Image::$format['height']
         ]);
 
-        return $image->resize(new Box(Calculate::$params['width'], Calculate::$params['height']));
+        Calculate::getSourceSizes();
+
+        $calculatedParams = Calculate::getParams();
+
+        return $image->resize(new Box($calculatedParams['width'], $calculatedParams['height']));
     }
 }

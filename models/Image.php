@@ -50,7 +50,7 @@ class Image
         $this->sourcePath = \Yii::$app->params['cdn']['inputPath'] . DIRECTORY_SEPARATOR . $source;
 
         self::$format = $format;
-        self::$image = new Imagine();
+        self::$image = new \Imagine\Imagick\Imagine();
         self::$palette = Palette::create($format);
         self::$source = Source::create($this->sourcePath);
     }
@@ -64,7 +64,11 @@ class Image
     {
         $filePath = Storage::chooseStorage() .DIRECTORY_SEPARATOR. time() . '_' . rand(0, 999) . '.jpg';
         $collage = self::$image->create(new Box(self::$format['width'], self::$format['height']), Image::$palette);
-        self::$image = $collage->paste(self::$source, new Point(Calculate::$params['left_margin'], Calculate::$params['top_margin']))
+
+        $calculatedParams = Calculate::getParams();
+
+        self::$image = $collage
+            ->paste(self::$source, new Point($calculatedParams['left_margin'], $calculatedParams['top_margin']))
             ->save($filePath);
 
         return $filePath;
