@@ -8,6 +8,10 @@
  */
 namespace app\helpers;
 
+/**
+ * Class Calculate
+ * @package app\helpers
+ */
 class Calculate
 {
     /**

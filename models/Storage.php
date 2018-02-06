@@ -50,6 +50,11 @@ class Storage extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * Выбор хранилища
+     *
+     * @return string
+     */
     public static function chooseStorage()
     {
         $storage = self::find();
@@ -72,3 +77,4 @@ class Storage extends \yii\db\ActiveRecord
         return $directory;
     }
 }
+
