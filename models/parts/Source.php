@@ -40,7 +40,7 @@ class Source {
             'height' => Image::$format['height']
         ]);
 
-        Calculate::getSourceSizes();
+        Calculate::execute();
 
         $calculatedParams = Calculate::getParams();
 

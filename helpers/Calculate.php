@@ -21,12 +21,32 @@ class Calculate
         'param_2_margin' => 0
     ];
 
+    /**
+     * Размеры исходника
+     *
+     * @var array
+     */
     private static $fromParams = [];
 
+    /**
+     * Размеры выходного изображения
+     *
+     * @var array
+     */
     private static $toParams = [];
 
-    public static $rotate = false;
+    /**
+     * Была ли ротация
+     *
+     * @var bool
+     */
+    private static $rotate = false;
 
+    /**
+     * Получить результирующие параметры
+     *
+     * @return array
+     */
     public static function getParams()
     {
         if (!self::$rotate) {
@@ -37,7 +57,6 @@ class Calculate
                 'top_margin' => (int)self::$params['param_2_margin']
             ];
         }
-
         return [
             'width' => (int)self::$params['param_2'],
             'height' => (int)self::$params['param_1'],
@@ -46,21 +65,37 @@ class Calculate
         ];
     }
 
+    /**
+     * Установить размеры входного и выходного
+     *
+     * @param $from
+     * @param $to
+     */
     public static function setSourceSizes($from, $to)
     {
-        self::$fromParams = $from;
-        self::$toParams = $to;
+        if ($from['width'] > $from['height']) {
+            self::$fromParams = $from;
+            self::$toParams = $to;
+        } else {
+            self::$fromParams['width'] = $from['height'];
+            self::$fromParams['height'] = $from['width'];
+
+            self::$toParams['width'] = $to['height'];
+            self::$toParams['height'] = $to['width'];
+
+            self::$rotate = true;
+        }
     }
 
     /**
-     *
+     * Обработка
      */
-    public static function getSourceSizes()
+    public static function execute()
     {
         if (self::$fromParams['width'] > self::$toParams['width'] && self::$fromParams['height'] > self::$toParams['height']) {
             // minimaze image
             self::minimaze();
-        } elseif (self::$fromParams['width']< self::$toParams['width'] && self::$fromParams['height'] < self::$toParams['height']) {
+        } elseif (self::$fromParams['width'] < self::$toParams['width'] && self::$fromParams['height'] < self::$toParams['height']) {
             // maximize image
             self::maximize();
         } else {
@@ -70,12 +105,18 @@ class Calculate
         self::margins();
     }
 
+    /**
+     * Расчет отступа
+     */
     private static function margins()
     {
         self::$params['param_2_margin'] = (self::$toParams['height'] - self::$params['param_2'])/2;
         self::$params['param_1_margin'] = (self::$toParams['width'] - self::$params['param_1'])/2;
     }
 
+    /**
+     * При уменьшении
+     */
     private static function minimaze()
     {
         // должна влезти и щирина и высота
@@ -94,6 +135,9 @@ class Calculate
         }
     }
 
+    /**
+     * При увеличении
+     */
     private static function maximize()
     {
         self::$params['param_1'] = self::$fromParams['width'];
