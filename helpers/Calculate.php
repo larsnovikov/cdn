@@ -8,67 +8,143 @@
  */
 namespace app\helpers;
 
+/**
+ * Class Calculate
+ * @package app\helpers
+ */
 class Calculate
 {
     /**
      * Выходные параметры
      * @var array
      */
-    public static $params = [
-        'width' => 0,
-        'height' => 0,
-        'top_margin' => 0,
-        'left_margin' => 0
+    private static $params = [
+        'param_1' => 0,
+        'param_2' => 0,
+        'param_1_margin' => 0,
+        'param_2_margin' => 0
     ];
 
     /**
-     * Расчетный блок
+     * Размеры исходника
+     *
+     * @var array
+     */
+    private static $fromParams = [];
+
+    /**
+     * Размеры выходного изображения
+     *
+     * @var array
+     */
+    private static $toParams = [];
+
+    /**
+     * Была ли ротация
+     *
+     * @var bool
+     */
+    private static $rotate = false;
+
+    /**
+     * Получить результирующие параметры
+     *
+     * @return array
+     */
+    public static function getParams()
+    {
+        if (!self::$rotate) {
+            return [
+                'width' => (int)self::$params['param_1'],
+                'height' => (int)self::$params['param_2'],
+                'left_margin' => (int)self::$params['param_1_margin'],
+                'top_margin' => (int)self::$params['param_2_margin']
+            ];
+        }
+        return [
+            'width' => (int)self::$params['param_2'],
+            'height' => (int)self::$params['param_1'],
+            'left_margin' => (int)self::$params['param_2_margin'],
+            'top_margin' => (int)self::$params['param_1_margin']
+        ];
+    }
+
+    /**
+     * Установить размеры входного и выходного
      *
      * @param $from
      * @param $to
      */
-    public static function getSourceSizes($from, $to)
+    public static function setSourceSizes($from, $to)
     {
-        if ($from['width'] > $to['width'] && $from['height'] > $to['height']) {
+        if ($from['width'] > $from['height']) {
+            self::$fromParams = $from;
+            self::$toParams = $to;
+        } else {
+            self::$fromParams['width'] = $from['height'];
+            self::$fromParams['height'] = $from['width'];
+
+            self::$toParams['width'] = $to['height'];
+            self::$toParams['height'] = $to['width'];
+
+            self::$rotate = true;
+        }
+    }
+
+    /**
+     * Обработка
+     */
+    public static function execute()
+    {
+        if (self::$fromParams['width'] > self::$toParams['width'] && self::$fromParams['height'] > self::$toParams['height']) {
             // minimaze image
-            self::minimaze($from, $to);
-        } elseif ($from['width']< $to['width'] && $from['height'] < $to['height']) {
+            self::minimaze();
+        } elseif (self::$fromParams['width'] < self::$toParams['width'] && self::$fromParams['height'] < self::$toParams['height']) {
             // maximize image
-            self::maximize($from, $to);
+            self::maximize();
         } else {
 
         }
 
-        self::margins($to);
+        self::margins();
     }
 
-    private static function margins($to)
+    /**
+     * Расчет отступа
+     */
+    private static function margins()
     {
-        self::$params['top_margin'] = ($to['height'] - self::$params['height'])/2;
-        self::$params['left_margin'] = ($to['width'] - self::$params['width'])/2;
+        self::$params['param_2_margin'] = (self::$toParams['height'] - self::$params['param_2'])/2;
+        self::$params['param_1_margin'] = (self::$toParams['width'] - self::$params['param_1'])/2;
     }
 
-    private static function minimaze($from, $to)
+    /**
+     * При уменьшении
+     */
+    private static function minimaze()
     {
         // должна влезти и щирина и высота
         // определим базовую сторону
-        $coefFrom = $from['width']/$from['height'];
-        $coefTo = $to['width']/$to['height'];
+        $coefFrom = self::$fromParams['width']/self::$fromParams['height'];
+        $coefTo = self::$toParams['width']/self::$toParams['height'];
 
         if ($coefFrom > $coefTo) {
-            $height = $to['width'] / $coefFrom;
-            self::$params['width'] = $to['width'];
-            self::$params['height'] = $height;
+            $height = self::$toParams['width'] / $coefFrom;
+            self::$params['param_1'] = self::$toParams['width'];
+            self::$params['param_2'] = $height;
         } else {
-            $width = ceil($to['height'] * $coefFrom);
-            self::$params['width'] = $width;
-            self::$params['height'] = $to['height'];
+            $width = ceil(self::$toParams['height'] * $coefFrom);
+            self::$params['param_1'] = $width;
+            self::$params['param_2'] = self::$toParams['height'];
         }
     }
 
-    private static function maximize($from, $to)
+    /**
+     * При увеличении
+     */
+    private static function maximize()
     {
-        self::$params['width'] = $from['width'];
-        self::$params['height'] = $from['height'];
+        self::$params['param_1'] = self::$fromParams['width'];
+        self::$params['param_2'] = self::$fromParams['height'];
     }
 }

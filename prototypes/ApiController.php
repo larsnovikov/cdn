@@ -5,9 +5,16 @@ namespace app\prototypes;
 use yii\rest\ActiveController;
 use yii\web\Response;
 
+/**
+ * Class ApiController
+ * @package app\prototypes
+ */
 class ApiController extends ActiveController
 {
 
+    /**
+     * @var string
+     */
     public $modelClass = '';
 
     /**
