@@ -103,8 +103,13 @@ class Calculate
             // maximize image
             self::maximize();
         } else {
-
+            self::customize();
         }
+
+        // TODO это проверка соотношения сторон исходника и выходного изображения
+      //  $fromCoef = self::$fromParams['width'] / self::$fromParams['height'];
+      //  $outCoef = self::$params['param_1'] / self::$params['param_2'];
+      //  var_dump($fromCoef, $outCoef);
 
         self::margins();
     }
@@ -114,8 +119,8 @@ class Calculate
      */
     private static function margins()
     {
-        self::$params['param_2_margin'] = (self::$toParams['height'] - self::$params['param_2'])/2;
-        self::$params['param_1_margin'] = (self::$toParams['width'] - self::$params['param_1'])/2;
+        self::$params['param_2_margin'] = (self::$toParams['height'] - self::$params['param_2']) / 2;
+        self::$params['param_1_margin'] = (self::$toParams['width'] - self::$params['param_1']) / 2;
     }
 
     /**
@@ -125,16 +130,30 @@ class Calculate
     {
         // должна влезти и щирина и высота
         // определим базовую сторону
-        $coefFrom = self::$fromParams['width']/self::$fromParams['height'];
-        $coefTo = self::$toParams['width']/self::$toParams['height'];
+        $coefFrom = self::$fromParams['width'] / self::$fromParams['height'];
+        $coefTo = self::$toParams['width'] / self::$toParams['height'];
 
         if ($coefFrom > $coefTo) {
             $height = self::$toParams['width'] / $coefFrom;
             self::$params['param_1'] = self::$toParams['width'];
             self::$params['param_2'] = $height;
         } else {
-            $width = ceil(self::$toParams['height'] * $coefFrom);
+            $width = self::$toParams['height'] * $coefFrom;
             self::$params['param_1'] = $width;
+            self::$params['param_2'] = self::$toParams['height'];
+        }
+    }
+
+    private static function customize()
+    {
+        $fromCoef = self::$fromParams['width'] / self::$fromParams['height'];
+        $toCoef = self::$toParams['width'] / self::$toParams['height'];
+
+        if ($toCoef < 1) {
+            self::$params['param_1'] = self::$toParams['width'];
+            self::$params['param_2'] = self::$toParams['width'] / $fromCoef;
+        } else {
+            self::$params['param_1'] = self::$toParams['height'] * $fromCoef;
             self::$params['param_2'] = self::$toParams['height'];
         }
     }
