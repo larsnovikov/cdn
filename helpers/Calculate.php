@@ -149,7 +149,7 @@ class Calculate
         $fromCoef = self::$fromParams['width'] / self::$fromParams['height'];
         $toCoef = self::$toParams['width'] / self::$toParams['height'];
 
-        if ($toCoef < 1) {
+        if ($toCoef <= 1) {
             self::$params['param_1'] = self::$toParams['width'];
             self::$params['param_2'] = self::$toParams['width'] / $fromCoef;
         } else {
