@@ -7,6 +7,8 @@
  * Time: 16:53
  */
 namespace app\helpers;
+use app\models\calculators\AbstractCalc;
+use app\models\calculators\InterfaceCalc;
 
 /**
  * Class Calculate
@@ -18,7 +20,7 @@ class Calculate
      * Выходные параметры
      * @var array
      */
-    private static $params = [
+    public static $params = [
         'param_1' => 0,
         'param_2' => 0,
         'param_1_margin' => 0,
@@ -30,29 +32,26 @@ class Calculate
      *
      * @var array
      */
-    private static $fromParams = [];
+    public static $fromParams = [];
 
     /**
      * Размеры выходного изображения
      *
      * @var array
      */
-    private static $toParams = [];
+    public static $toParams = [];
 
     /**
      * Была ли ротация
      *
      * @var bool
      */
-    private static $rotate = false;
+    public static $rotate = false;
 
     /**
-     * @return string
+     * @var
      */
-    public static function getClassName()
-    {
-        return __CLASS__;
-    }
+    public static $calculationClass;
 
     /**
      * Получить результирующие параметры
@@ -136,34 +135,18 @@ class Calculate
      */
     private static function minimaze()
     {
-        // должна влезти и щирина и высота
-        // определим базовую сторону
-        $coefFrom = self::$fromParams['width'] / self::$fromParams['height'];
-        $coefTo = self::$toParams['width'] / self::$toParams['height'];
+        /** @var InterfaceCalc $calculationClass */
+        $calculationClass = new self::$calculationClass();
 
-        if ($coefFrom > $coefTo) {
-            $height = self::$toParams['width'] / $coefFrom;
-            self::$params['param_1'] = self::$toParams['width'];
-            self::$params['param_2'] = $height;
-        } else {
-            $width = self::$toParams['height'] * $coefFrom;
-            self::$params['param_1'] = $width;
-            self::$params['param_2'] = self::$toParams['height'];
-        }
+        $calculationClass->minimaze();
     }
 
     private static function customize()
     {
-        $fromCoef = self::$fromParams['width'] / self::$fromParams['height'];
-        $toCoef = self::$toParams['width'] / self::$toParams['height'];
+        /** @var InterfaceCalc $calculationClass */
+        $calculationClass = new self::$calculationClass();
 
-        if ($toCoef <= 1) {
-            self::$params['param_1'] = self::$toParams['width'];
-            self::$params['param_2'] = self::$toParams['width'] / $fromCoef;
-        } else {
-            self::$params['param_1'] = self::$toParams['height'] * $fromCoef;
-            self::$params['param_2'] = self::$toParams['height'];
-        }
+        $calculationClass->customize();
     }
 
     /**
@@ -171,7 +154,9 @@ class Calculate
      */
     private static function maximize()
     {
-        self::$params['param_1'] = self::$fromParams['width'];
-        self::$params['param_2'] = self::$fromParams['height'];
+        /** @var InterfaceCalc $calculationClass */
+        $calculationClass = new self::$calculationClass();
+
+        $calculationClass->customize();
     }
 }
