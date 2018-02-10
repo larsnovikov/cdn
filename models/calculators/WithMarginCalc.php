@@ -71,4 +71,9 @@ class WithMarginCalc implements InterfaceCalc
             Calculate::$params['param_2'] = Calculate::$toParams['height'];
         }
     }
+
+    public function beforeExecution()
+    {
+        // TODO: Implement beforeExecution() method.
+    }
 }

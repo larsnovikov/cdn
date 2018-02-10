@@ -28,4 +28,6 @@ interface InterfaceCalc
      * @return mixed
      */
     public function customize();
+
+    public function beforeExecution();
 }

@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Image;
+use app\models\UploadRequestStorage;
 use app\prototypes\ApiController;
 use app\validators\RemoveValidator;
 use app\validators\UploadValidator;
@@ -29,9 +30,15 @@ class ImageController extends ApiController
         $out = [];
 
         foreach ($formats as $format) {
-            $image = new Image($request['source'], $format);
-            $out[$format['name']] = $image->build();
-            $image->afterExecution();
+
+            $object = UploadRequestStorage::getObject(true, $request['source'], $format);
+            var_dump($object);
+            exit;
+//
+//
+//            $image = new Image($request['source'], $format);
+//            $out[$format['name']] = $image->build();
+         //   $image->afterExecution();
         }
 
         return $out;

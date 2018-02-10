@@ -16,42 +16,7 @@ use app\models\calculators\InterfaceCalc;
  */
 class Calculate
 {
-    /**
-     * Выходные параметры
-     * @var array
-     */
-    public static $params = [
-        'param_1' => 0,
-        'param_2' => 0,
-        'param_1_margin' => 0,
-        'param_2_margin' => 0
-    ];
 
-    /**
-     * Размеры исходника
-     *
-     * @var array
-     */
-    public static $fromParams = [];
-
-    /**
-     * Размеры выходного изображения
-     *
-     * @var array
-     */
-    public static $toParams = [];
-
-    /**
-     * Была ли ротация
-     *
-     * @var bool
-     */
-    public static $rotate = false;
-
-    /**
-     * @var
-     */
-    public static $calculationClass;
 
     /**
      * Получить результирующие параметры

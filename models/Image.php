@@ -8,6 +8,7 @@
 
 namespace app\models;
 use app\helpers\Calculate;
+use app\models\calculators\InterfaceCalc;
 use app\models\calculators\NoMarginCalc;
 use app\models\calculators\WithMarginCalc;
 use app\models\calculators\WithoutMarginCalc;
@@ -15,6 +16,7 @@ use app\models\parts\Palette;
 use app\models\parts\Source;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
+use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
 
 /**
@@ -23,28 +25,6 @@ use Imagine\Image\Point;
  */
 class Image
 {
-    /**
-     * @var null|string
-     */
-    public $sourcePath = null;
-
-    /**
-     * @var Imagine|null
-     */
-    public static $image = null;
-    /**
-     * @var \Imagine\Gd\Image|\Imagine\Image\ImageInterface|null
-     */
-    public static $palette = null;
-    /**
-     * @var \Imagine\Image\ImageInterface|\Imagine\Imagick\Image|null
-     */
-    public static $source = null;
-
-    /**
-     * @var array
-     */
-    public static $format = [];
 
     /**
      * Image constructor.
@@ -53,21 +33,15 @@ class Image
      */
     public function __construct($source, $format)
     {
-        $this->sourcePath = \Yii::$app->params['cdn']['inputPath'] . DIRECTORY_SEPARATOR . $source;
 
-        self::$format = $format;
+        /** @var InterfaceCalc $calculationClass */
+        $calculationClass = new Calculate::$calculationClass();
 
-        if ($format['margins']) {
-            // режим с ушами
-            Calculate::$calculationClass = WithMarginCalc::getClassName();
-        } else {
-            // режим без ушей
-            Calculate::$calculationClass = WithoutMarginCalc::getClassName();
-        }
+        $calculationClass->beforeExecution();
 
         self::$image = new \Imagine\Imagick\Imagine();
         self::$palette = Palette::create($format);
-        self::$source = Source::create($this->sourcePath);
+        self::$source = Source::create(self::$sourcePath);
     }
 
     /**
@@ -101,7 +75,7 @@ class Image
     public function afterExecution()
     {
         if (array_key_exists('remove_source', self::$format) && self::$format['remove_source']) {
-            unlink($this->sourcePath);
+            unlink(self::$sourcePath);
         } else {
             // TODO тут по идее должен быть перенос в хранилище
         }
