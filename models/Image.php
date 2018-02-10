@@ -62,7 +62,13 @@ class Image
      */
     public function build()
     {
-        $filePath = Storage::chooseStorage() . DIRECTORY_SEPARATOR. time() . '_' . rand(0, 999) . '.jpg';
+        $filePath = Storage::chooseStorage()
+            . DIRECTORY_SEPARATOR. time()
+            . '_' . self::$format['width']
+            . '_' . self::$format['height']
+            . '_' . rand(0, 99999)
+            . '.jpg';
+
         $collage = self::$image->create(new Box(self::$format['width'], self::$format['height']), Image::$palette);
 
         $calculatedParams = Calculate::getParams();
