@@ -9,10 +9,10 @@
 namespace app\helpers;
 
 /**
- * Class Calculate
+ * Class CalculateMargins
  * @package app\helpers
  */
-class Calculate
+class CalculateMargins extends Calculate
 {
     /**
      * Выходные параметры

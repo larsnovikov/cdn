@@ -32,7 +32,9 @@ class Source {
 
         $image = $imagine->open($sourcePath);
 
-        Calculate::setSourceSizes([
+        /** @var Calculate $calculationClass */
+        $calculationClass = Image::getCalculationClassName();
+        $calculationClass::setSourceSizes([
             'width' => $image->getSize()->getWidth(),
             'height' => $image->getSize()->getHeight()
         ], [
@@ -40,9 +42,9 @@ class Source {
             'height' => Image::$format['height']
         ]);
 
-        Calculate::execute();
+        $calculationClass::execute();
 
-        $calculatedParams = Calculate::getParams();
+        $calculatedParams = $calculationClass::getParams();
 
         return $image->resize(new Box($calculatedParams['width'], $calculatedParams['height']));
     }

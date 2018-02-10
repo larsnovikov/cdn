@@ -9,10 +9,10 @@
 namespace app\helpers;
 
 /**
- * Class Calculate
+ * Class CalculateNoMargins
  * @package app\helpers
  */
-class Calculate
+class CalculateNoMargins extends Calculate
 {
     /**
      * Выходные параметры
@@ -52,29 +52,6 @@ class Calculate
     public static function getClassName()
     {
         return __CLASS__;
-    }
-
-    /**
-     * Получить результирующие параметры
-     *
-     * @return array
-     */
-    public static function getParams()
-    {
-        if (!self::$rotate) {
-            return [
-                'width' => (int)self::$params['param_1'],
-                'height' => (int)self::$params['param_2'],
-                'left_margin' => (int)self::$params['param_1_margin'],
-                'top_margin' => (int)self::$params['param_2_margin']
-            ];
-        }
-        return [
-            'width' => (int)self::$params['param_2'],
-            'height' => (int)self::$params['param_1'],
-            'left_margin' => (int)self::$params['param_2_margin'],
-            'top_margin' => (int)self::$params['param_1_margin']
-        ];
     }
 
     /**

@@ -8,6 +8,8 @@
 
 namespace app\models;
 use app\helpers\Calculate;
+use app\helpers\CalculateMargins;
+use app\helpers\CalculateNoMargins;
 use app\models\parts\Palette;
 use app\models\parts\Source;
 use Imagine\Gd\Imagine;
@@ -38,7 +40,15 @@ class Image
      */
     public static $source = null;
 
+    /**
+     * @var array
+     */
     public static $format = [];
+
+    /**
+     * @var
+     */
+    private static $calculationClass;
 
     /**
      * Image constructor.
@@ -50,9 +60,23 @@ class Image
         $this->sourcePath = \Yii::$app->params['cdn']['inputPath'] . DIRECTORY_SEPARATOR . $source;
 
         self::$format = $format;
+
+        if ($format['margins']) {
+            // режим с ушами
+            self::$calculationClass = CalculateMargins::getClassName();
+        } else {
+            // режим без ушей
+            self::$calculationClass = CalculateNoMargins::getClassName();
+        }
+
         self::$image = new \Imagine\Imagick\Imagine();
         self::$palette = Palette::create($format);
         self::$source = Source::create($this->sourcePath);
+    }
+
+    public static function getCalculationClassName()
+    {
+        return self::$calculationClass;
     }
 
     /**
@@ -71,7 +95,9 @@ class Image
 
         $collage = self::$image->create(new Box(self::$format['width'], self::$format['height']), Image::$palette);
 
-        $calculatedParams = Calculate::getParams();
+        /** @var Calculate $calculationClass */
+        $calculationClass = self::getCalculationClassName();
+        $calculatedParams = $calculationClass::getParams();
 
         self::$image = $collage
             ->paste(self::$source, new Point($calculatedParams['left_margin'], $calculatedParams['top_margin']))
