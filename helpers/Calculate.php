@@ -9,6 +9,7 @@
 namespace app\helpers;
 use app\models\calculators\AbstractCalc;
 use app\models\calculators\InterfaceCalc;
+use app\models\UploadRequestStorage;
 
 /**
  * Class Calculate
@@ -25,53 +26,33 @@ class Calculate
      */
     public static function getParams()
     {
-        if (!self::$rotate) {
+        if (!UploadRequestStorage::getObject()->rotate) {
             return [
-                'width' => (int)self::$params['param_1'],
-                'height' => (int)self::$params['param_2'],
-                'left_margin' => (int)self::$params['param_1_margin'],
-                'top_margin' => (int)self::$params['param_2_margin']
+                'width' => (int)UploadRequestStorage::getObject()->params['param_1'],
+                'height' => (int)UploadRequestStorage::getObject()->params['param_2'],
+                'left_margin' => (int)UploadRequestStorage::getObject()->params['param_1_margin'],
+                'top_margin' => (int)UploadRequestStorage::getObject()->params['param_2_margin']
             ];
         }
         return [
-            'width' => (int)self::$params['param_2'],
-            'height' => (int)self::$params['param_1'],
-            'left_margin' => (int)self::$params['param_2_margin'],
-            'top_margin' => (int)self::$params['param_1_margin']
+            'width' => (int)UploadRequestStorage::getObject()->params['param_2'],
+            'height' => (int)UploadRequestStorage::getObject()->params['param_1'],
+            'left_margin' => (int)UploadRequestStorage::getObject()->params['param_2_margin'],
+            'top_margin' => (int)UploadRequestStorage::getObject()->params['param_1_margin']
         ];
     }
 
-    /**
-     * Установить размеры входного и выходного
-     *
-     * @param $from
-     * @param $to
-     */
-    public static function setSourceSizes($from, $to)
-    {
-        if ($from['width'] > $from['height']) {
-            self::$fromParams = $from;
-            self::$toParams = $to;
-        } else {
-            self::$fromParams['width'] = $from['height'];
-            self::$fromParams['height'] = $from['width'];
-
-            self::$toParams['width'] = $to['height'];
-            self::$toParams['height'] = $to['width'];
-
-            self::$rotate = true;
-        }
-    }
 
     /**
      * Обработка
      */
     public static function execute()
     {
-        if (self::$fromParams['width'] > self::$toParams['width'] && self::$fromParams['height'] > self::$toParams['height']) {
+        $object = UploadRequestStorage::getObject();
+        if ($object->fromParams['width'] > $object->toParams['width'] && $object->fromParams['height'] > $object->toParams['height']) {
             // minimaze image
             self::minimaze();
-        } elseif (self::$fromParams['width'] < self::$toParams['width'] && self::$fromParams['height'] < self::$toParams['height']) {
+        } elseif ($object->fromParams['width'] < $object->toParams['width'] && $object->fromParams['height'] < $object->toParams['height']) {
             // maximize image
             self::maximize();
         } else {
@@ -91,8 +72,9 @@ class Calculate
      */
     private static function margins()
     {
-        self::$params['param_2_margin'] = (self::$toParams['height'] - self::$params['param_2']) / 2;
-        self::$params['param_1_margin'] = (self::$toParams['width'] - self::$params['param_1']) / 2;
+        $object = UploadRequestStorage::getObject();
+        $object->params['param_2_margin'] = ($object->toParams['height'] - $object->params['param_2']) / 2;
+        $object->params['param_1_margin'] = ($object->toParams['width'] - $object->params['param_1']) / 2;
     }
 
     /**
@@ -100,16 +82,18 @@ class Calculate
      */
     private static function minimaze()
     {
+        $object = UploadRequestStorage::getObject();
         /** @var InterfaceCalc $calculationClass */
-        $calculationClass = new self::$calculationClass();
+        $calculationClass = new $object->calculationClass();
 
         $calculationClass->minimaze();
     }
 
     private static function customize()
     {
+        $object = UploadRequestStorage::getObject();
         /** @var InterfaceCalc $calculationClass */
-        $calculationClass = new self::$calculationClass();
+        $calculationClass = new $object->calculationClass();
 
         $calculationClass->customize();
     }
@@ -119,9 +103,10 @@ class Calculate
      */
     private static function maximize()
     {
+        $object = UploadRequestStorage::getObject();
         /** @var InterfaceCalc $calculationClass */
-        $calculationClass = new self::$calculationClass();
+        $calculationClass = new $object->calculationClass();
 
-        $calculationClass->customize();
+        $calculationClass->maximize();
     }
 }

@@ -9,10 +9,14 @@
 namespace app\models;
 
 
+use app\helpers\Calculate;
 use app\models\calculators\InterfaceCalc;
 use app\models\calculators\WithMarginCalc;
 use app\models\calculators\WithoutMarginCalc;
+use app\models\parts\Palette;
 use app\models\parts\Source;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
 use Imagine\Imagick\Imagine;
 
 class UploadRequestStorage
@@ -77,6 +81,10 @@ class UploadRequestStorage
      */
     public $calculationClass;
 
+    public $outFileName = '';
+
+
+
     private static $object = null;
 
     public function __construct($source, $format)
@@ -102,7 +110,7 @@ class UploadRequestStorage
         // инициализируем source;
         /** @var Imagine $imagine */
         $this->image = new Imagine();
-        $this->source =  $this->image->open($this->sourcePath);
+        $this->source = $this->image->open($this->sourcePath);
 
         // инициализируем размеры
         self::setSourceSizes([
@@ -117,6 +125,13 @@ class UploadRequestStorage
         /** @var InterfaceCalc $calculationClass */
         $calculationClass = new $this->calculationClass();
         $calculationClass->beforeExecution();
+
+        $this->outFileName = Storage::chooseStorage()
+            . DIRECTORY_SEPARATOR. time()
+            . '_' . $this->format['width']
+            . '_' . $this->format['height']
+            . '_' . rand(0, 99999)
+            . '.jpg';
     }
 
     public static function getObject($force = false, $source = false, $format = [])
@@ -148,5 +163,21 @@ class UploadRequestStorage
 
             $this->rotate = true;
         }
+    }
+
+    public function build()
+    {
+        $this->palette = Palette::create();
+        $collage = $this->image->create(new Box($this->format['width'], $this->format['height']), $this->palette);
+
+        Calculate::execute();
+        $calculatedParams = Calculate::getParams();
+        var_dump($calculatedParams);
+
+        $this->image = $collage
+            ->paste($this->source, new Point($calculatedParams['left_margin'], $calculatedParams['top_margin']))
+            ->save($this->outFileName);
+
+        return $this->outFileName;
     }
 }

@@ -8,6 +8,7 @@
 
 namespace app\models\parts;
 
+use app\models\UploadRequestStorage;
 use Imagine\Image\Palette\RGB;
 
 /**
@@ -17,12 +18,12 @@ use Imagine\Image\Palette\RGB;
 class Palette
 {
     /**
-     * @param $format
      * @return \Imagine\Gd\Image|\Imagine\Image\ImageInterface
      */
-    public static function create($format)
+    public static function create()
     {
+        $color = UploadRequestStorage::getObject()->format['background']['color'];
         $palette = new RGB();
-        return $palette->color("#{$format['background']['color']}", 100);
+        return $palette->color("#{$color}", 100);
     }
 }

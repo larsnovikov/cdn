@@ -32,13 +32,7 @@ class ImageController extends ApiController
         foreach ($formats as $format) {
 
             $object = UploadRequestStorage::getObject(true, $request['source'], $format);
-            var_dump($object);
-            exit;
-//
-//
-//            $image = new Image($request['source'], $format);
-//            $out[$format['name']] = $image->build();
-         //   $image->afterExecution();
+            $out[$format['name']] = $object->build();
         }
 
         return $out;
