@@ -109,8 +109,8 @@ class UploadRequestStorage
 
         // инициализируем source;
         /** @var Imagine $imagine */
-        $this->image = new Imagine();
-        $this->source = $this->image->open($this->sourcePath);
+        $image = new Imagine();
+        $this->source = $image->open($this->sourcePath);
 
         // инициализируем размеры
         self::setSourceSizes([
@@ -167,15 +167,20 @@ class UploadRequestStorage
 
     public function build()
     {
+        // создаем подложку размером с выходное и указанным цветом
         $this->palette = Palette::create();
-        $collage = $this->image->create(new Box($this->format['width'], $this->format['height']), $this->palette);
+        $image = new Imagine();
+        $palette = $image->create(new Box($this->format['width'], $this->format['height']), $this->palette);
 
+        // расчитываем параметры
         Calculate::execute();
         $calculatedParams = Calculate::getParams();
-        var_dump($calculatedParams);
 
-        $this->image = $collage
-            ->paste($this->source, new Point($calculatedParams['left_margin'], $calculatedParams['top_margin']))
+        // ресайзим исходное изображение
+        $this->source->resize(new Box($calculatedParams['width'], $calculatedParams['height']));
+
+        // собираем картинку
+        $palette->paste($this->source, new Point($calculatedParams['left_margin'], $calculatedParams['top_margin']))
             ->save($this->outFileName);
 
         return $this->outFileName;
