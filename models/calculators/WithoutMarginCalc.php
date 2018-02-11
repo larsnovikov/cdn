@@ -7,8 +7,7 @@
  */
 
 namespace app\models\calculators;
-use app\helpers\Calculate;
-use app\models\Image;
+
 use app\models\UploadRequestStorage;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
@@ -33,9 +32,6 @@ class WithoutMarginCalc implements InterfaceCalc
      */
     public function maximize()
     {
-        var_dump(111);
-        Calculate::$params['param_1'] = Calculate::$toParams['width'];
-        Calculate::$params['param_2'] = Calculate::$toParams['height'];
     }
 
     /**
@@ -43,9 +39,6 @@ class WithoutMarginCalc implements InterfaceCalc
      */
     public function minimaze()
     {
-        var_dump(222);
-        Calculate::$params['param_1'] = Calculate::$toParams['width'];
-        Calculate::$params['param_2'] = Calculate::$toParams['height'];
     }
 
     /**
@@ -53,21 +46,31 @@ class WithoutMarginCalc implements InterfaceCalc
      */
     public function customize()
     {
-        var_dump(333);
-        Calculate::$params['param_1'] = Calculate::$toParams['width'];
-        Calculate::$params['param_2'] = Calculate::$toParams['height'];
     }
 
     public function beforeExecution()
     {
-        $file = 'C:\OpenServer\domains\cdn.loc\directory\output\tmp/'.time().rand().'.jpg';
         $mode    = ImageInterface::THUMBNAIL_OUTBOUND;
         $imagine = new Imagine();
-        $size    = new Box(UploadRequestStorage::getObject()->toParams['width'], UploadRequestStorage::getObject()->toParams['height']);
-        $imagine->open(UploadRequestStorage::getObject()->sourcePath)
-            ->thumbnail($size, $mode)
-            ->save($file);
 
-        UploadRequestStorage::getObject()->sourcePath = $file;
+        $thumbWidth = UploadRequestStorage::getObject()->toParams['width'];
+        $thumbHeight = UploadRequestStorage::getObject()->toParams['height'];
+
+        if (UploadRequestStorage::getObject()->toParams['width'] > UploadRequestStorage::getObject()->fromParams['width']) {
+            $thumbWidth = UploadRequestStorage::getObject()->fromParams['width'];
+        }
+
+        if (UploadRequestStorage::getObject()->toParams['height'] > UploadRequestStorage::getObject()->fromParams['height']) {
+            $thumbHeight = UploadRequestStorage::getObject()->fromParams['height'];
+        }
+
+        $size = new Box($thumbWidth, $thumbHeight);
+
+        UploadRequestStorage::getObject()->source = $imagine->open(UploadRequestStorage::getObject()->sourcePath)
+            ->thumbnail($size, $mode);
+
+        // Установим размеры по размеру тумбика
+        UploadRequestStorage::getObject()->params['param_1'] = $thumbWidth;
+        UploadRequestStorage::getObject()->params['param_2'] = $thumbHeight;
     }
 }
