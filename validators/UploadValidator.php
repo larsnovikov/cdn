@@ -19,6 +19,13 @@ use yii\base\Exception;
 class UploadValidator
 {
     /**
+     * @var array
+     */
+    private static $validFileTypes = [
+        'image/jpeg'
+    ];
+
+    /**
      * Вадидатор массива параметров
      * Пример
      * [
@@ -29,7 +36,8 @@ class UploadValidator
      *         'background' => [
      *             'color' => '000'
      *         ],
-     *         'margins' => true
+     *         'margins' => true,
+     *         'optimize' => true
      *     ],
      *     'medium' => [
      *         'name' => 'medium',
@@ -38,7 +46,8 @@ class UploadValidator
      *         'background' => [
      *             'color' => '000'
      *         ],
-     *         'margins' => false
+     *         'margins' => false,
+     *         'optimize' => true
      *     ]
      * ]
      * @param $formats
@@ -104,6 +113,10 @@ class UploadValidator
         $filePath = \Yii::$app->params['cdn']['inputPath'] . DIRECTORY_SEPARATOR . $request['source'];
         if (!file_exists($filePath)) {
             throw new Exception('Source file does not exists!');
+        }
+
+        if (!in_array(mime_content_type($filePath), self::$validFileTypes)) {
+            throw new Exception('Invalid mime type of source file!');
         }
 
         // проверим наличие параметра форматов
