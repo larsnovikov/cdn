@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-use app\models\Image;
+use app\models\Upload;
 use app\prototypes\ApiController;
 use app\validators\RemoveValidator;
 use app\validators\UploadValidator;
@@ -29,9 +29,9 @@ class ImageController extends ApiController
         $out = [];
 
         foreach ($formats as $format) {
-            $image = new Image($request['source'], $format);
-            $out[$format['name']] = $image->build();
-            $image->afterExecution();
+
+            $object = Upload::getObject(true, $request['source'], $format);
+            $out[$format['name']] = $object->build();
         }
 
         return $out;
