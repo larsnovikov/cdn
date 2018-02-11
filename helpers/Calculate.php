@@ -9,7 +9,7 @@
 namespace app\helpers;
 
 use app\models\calculators\InterfaceCalc;
-use app\models\UploadRequestStorage;
+use app\models\Upload;
 
 /**
  * Class Calculate
@@ -26,19 +26,19 @@ class Calculate
      */
     public static function getParams()
     {
-        if (!UploadRequestStorage::getObject()->rotate) {
+        if (!Upload::getObject()->rotate) {
             return [
-                'width' => (int)UploadRequestStorage::getObject()->params['param_1'],
-                'height' => (int)UploadRequestStorage::getObject()->params['param_2'],
-                'left_margin' => (int)UploadRequestStorage::getObject()->params['param_1_margin'],
-                'top_margin' => (int)UploadRequestStorage::getObject()->params['param_2_margin']
+                'width' => (int)Upload::getObject()->params['param_1'],
+                'height' => (int)Upload::getObject()->params['param_2'],
+                'left_margin' => (int)Upload::getObject()->params['param_1_margin'],
+                'top_margin' => (int)Upload::getObject()->params['param_2_margin']
             ];
         }
         return [
-            'width' => (int)UploadRequestStorage::getObject()->params['param_2'],
-            'height' => (int)UploadRequestStorage::getObject()->params['param_1'],
-            'left_margin' => (int)UploadRequestStorage::getObject()->params['param_2_margin'],
-            'top_margin' => (int)UploadRequestStorage::getObject()->params['param_1_margin']
+            'width' => (int)Upload::getObject()->params['param_2'],
+            'height' => (int)Upload::getObject()->params['param_1'],
+            'left_margin' => (int)Upload::getObject()->params['param_2_margin'],
+            'top_margin' => (int)Upload::getObject()->params['param_1_margin']
         ];
     }
 
@@ -48,7 +48,7 @@ class Calculate
      */
     public static function execute()
     {
-        $object = UploadRequestStorage::getObject();
+        $object = Upload::getObject();
         if ($object->fromParams['width'] > $object->toParams['width'] && $object->fromParams['height'] > $object->toParams['height']) {
             // minimaze image
             self::minimaze();
@@ -72,7 +72,7 @@ class Calculate
      */
     private static function margins()
     {
-        $object = UploadRequestStorage::getObject();
+        $object = Upload::getObject();
         $object->params['param_2_margin'] = ($object->toParams['height'] - $object->params['param_2']) / 2;
         $object->params['param_1_margin'] = ($object->toParams['width'] - $object->params['param_1']) / 2;
     }
@@ -82,7 +82,7 @@ class Calculate
      */
     private static function minimaze()
     {
-        $object = UploadRequestStorage::getObject();
+        $object = Upload::getObject();
         /** @var InterfaceCalc $calculationClass */
         $calculationClass = new $object->calculationClass();
 
@@ -91,7 +91,7 @@ class Calculate
 
     private static function customize()
     {
-        $object = UploadRequestStorage::getObject();
+        $object = Upload::getObject();
         /** @var InterfaceCalc $calculationClass */
         $calculationClass = new $object->calculationClass();
 
@@ -103,7 +103,7 @@ class Calculate
      */
     private static function maximize()
     {
-        $object = UploadRequestStorage::getObject();
+        $object = Upload::getObject();
         /** @var InterfaceCalc $calculationClass */
         $calculationClass = new $object->calculationClass();
 

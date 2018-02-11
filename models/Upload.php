@@ -8,18 +8,16 @@
 
 namespace app\models;
 
-
 use app\helpers\Calculate;
 use app\models\calculators\InterfaceCalc;
 use app\models\calculators\WithMarginCalc;
 use app\models\calculators\WithoutMarginCalc;
 use app\models\parts\Palette;
-use app\models\parts\Source;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Imagick\Imagine;
 
-class UploadRequestStorage
+class Upload
 {
     /**
      * @var null|string

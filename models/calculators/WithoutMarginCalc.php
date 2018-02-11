@@ -8,7 +8,7 @@
 
 namespace app\models\calculators;
 
-use app\models\UploadRequestStorage;
+use app\models\Upload;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Imagine\Imagick\Imagine;
@@ -56,29 +56,29 @@ class WithoutMarginCalc implements InterfaceCalc
         $mode    = ImageInterface::THUMBNAIL_OUTBOUND;
         $imagine = new Imagine();
 
-        $thumbWidth = UploadRequestStorage::getObject()->toParams['width'];
-        $thumbHeight = UploadRequestStorage::getObject()->toParams['height'];
+        $thumbWidth = Upload::getObject()->toParams['width'];
+        $thumbHeight = Upload::getObject()->toParams['height'];
 
-        if (UploadRequestStorage::getObject()->toParams['width'] > UploadRequestStorage::getObject()->fromParams['width']) {
-            $thumbWidth = UploadRequestStorage::getObject()->fromParams['width'];
+        if (Upload::getObject()->toParams['width'] > Upload::getObject()->fromParams['width']) {
+            $thumbWidth = Upload::getObject()->fromParams['width'];
         }
 
-        if (UploadRequestStorage::getObject()->toParams['height'] > UploadRequestStorage::getObject()->fromParams['height']) {
-            $thumbHeight = UploadRequestStorage::getObject()->fromParams['height'];
+        if (Upload::getObject()->toParams['height'] > Upload::getObject()->fromParams['height']) {
+            $thumbHeight = Upload::getObject()->fromParams['height'];
         }
 
         //  если включена ротация, перевернем размеры
-        if (UploadRequestStorage::getObject()->rotate) {
+        if (Upload::getObject()->rotate) {
             $size = new Box($thumbHeight, $thumbWidth);
         } else {
             $size = new Box($thumbWidth, $thumbHeight);
         }
 
-        UploadRequestStorage::getObject()->source = $imagine->open(UploadRequestStorage::getObject()->sourcePath)
+        Upload::getObject()->source = $imagine->open(Upload::getObject()->sourcePath)
             ->thumbnail($size, $mode);
 
         // Установим размеры по размеру тумбика
-        UploadRequestStorage::getObject()->params['param_1'] = $thumbWidth;
-        UploadRequestStorage::getObject()->params['param_2'] = $thumbHeight;
+        Upload::getObject()->params['param_1'] = $thumbWidth;
+        Upload::getObject()->params['param_2'] = $thumbHeight;
     }
 }

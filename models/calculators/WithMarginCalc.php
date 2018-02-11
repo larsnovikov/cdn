@@ -10,7 +10,7 @@ namespace app\models\calculators;
 
 
 use app\helpers\Calculate;
-use app\models\UploadRequestStorage;
+use app\models\Upload;
 
 /**
  * Class WithMarginCalc
@@ -31,8 +31,8 @@ class WithMarginCalc implements InterfaceCalc
      */
     public function maximize()
     {
-        UploadRequestStorage::getObject()->params['param_1'] = UploadRequestStorage::getObject()->fromParams['width'];
-        UploadRequestStorage::getObject()->params['param_2'] = UploadRequestStorage::getObject()->fromParams['height'];
+        Upload::getObject()->params['param_1'] = Upload::getObject()->fromParams['width'];
+        Upload::getObject()->params['param_2'] = Upload::getObject()->fromParams['height'];
     }
 
     /**
@@ -42,17 +42,17 @@ class WithMarginCalc implements InterfaceCalc
     {
         // должна влезти и щирина и высота
         // определим базовую сторону
-        $coefFrom = UploadRequestStorage::getObject()->fromParams['width'] / UploadRequestStorage::getObject()->fromParams['height'];
-        $coefTo = UploadRequestStorage::getObject()->toParams['width'] / UploadRequestStorage::getObject()->toParams['height'];
+        $coefFrom = Upload::getObject()->fromParams['width'] / Upload::getObject()->fromParams['height'];
+        $coefTo = Upload::getObject()->toParams['width'] / Upload::getObject()->toParams['height'];
 
         if ($coefFrom > $coefTo) {
-            $height = UploadRequestStorage::getObject()->toParams['width'] / $coefFrom;
-            UploadRequestStorage::getObject()->params['param_1'] = UploadRequestStorage::getObject()->toParams['width'];
-            UploadRequestStorage::getObject()->params['param_2'] = $height;
+            $height = Upload::getObject()->toParams['width'] / $coefFrom;
+            Upload::getObject()->params['param_1'] = Upload::getObject()->toParams['width'];
+            Upload::getObject()->params['param_2'] = $height;
         } else {
-            $width = UploadRequestStorage::getObject()->toParams['height'] * $coefFrom;
-            UploadRequestStorage::getObject()->params['param_1'] = $width;
-            UploadRequestStorage::getObject()->params['param_2'] = UploadRequestStorage::getObject()->toParams['height'];
+            $width = Upload::getObject()->toParams['height'] * $coefFrom;
+            Upload::getObject()->params['param_1'] = $width;
+            Upload::getObject()->params['param_2'] = Upload::getObject()->toParams['height'];
         }
     }
 
@@ -61,15 +61,15 @@ class WithMarginCalc implements InterfaceCalc
      */
     public function customize()
     {
-        $fromCoef = UploadRequestStorage::getObject()->fromParams['width'] / UploadRequestStorage::getObject()->fromParams['height'];
-        $toCoef = UploadRequestStorage::getObject()->toParams['width'] / UploadRequestStorage::getObject()->toParams['height'];
+        $fromCoef = Upload::getObject()->fromParams['width'] / Upload::getObject()->fromParams['height'];
+        $toCoef = Upload::getObject()->toParams['width'] / Upload::getObject()->toParams['height'];
 
         if ($toCoef <= 1) {
-            UploadRequestStorage::getObject()->params['param_1'] = UploadRequestStorage::getObject()->toParams['width'];
-            UploadRequestStorage::getObject()->params['param_2'] = UploadRequestStorage::getObject()->toParams['width'] / $fromCoef;
+            Upload::getObject()->params['param_1'] = Upload::getObject()->toParams['width'];
+            Upload::getObject()->params['param_2'] = Upload::getObject()->toParams['width'] / $fromCoef;
         } else {
-            UploadRequestStorage::getObject()->params['param_1'] = UploadRequestStorage::getObject()->toParams['height'] * $fromCoef;
-            UploadRequestStorage::getObject()->params['param_2'] = UploadRequestStorage::getObject()->toParams['height'];
+            Upload::getObject()->params['param_1'] = Upload::getObject()->toParams['height'] * $fromCoef;
+            Upload::getObject()->params['param_2'] = Upload::getObject()->toParams['height'];
         }
     }
 
