@@ -9,6 +9,7 @@
 namespace app\models;
 
 use app\helpers\Calculate;
+use app\models\calculators\Calc;
 use app\models\calculators\InterfaceCalc;
 use app\models\calculators\WithMarginCalc;
 use app\models\calculators\WithoutMarginCalc;
@@ -128,7 +129,7 @@ class Upload
         ]);
 
         // выполняем предобработку
-        /** @var InterfaceCalc $calculationClass */
+        /** @var Calc $calculationClass */
         $calculationClass = new $this->calculationClass();
         $calculationClass->beforeExecution();
 

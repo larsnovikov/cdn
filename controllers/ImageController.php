@@ -20,9 +20,8 @@ class ImageController extends ApiController
      */
     public function actionUpload()
     {
-        UploadValidator::validateRequest();
-
-        $request = Yii::$app->request->get();
+        $request = \Yii::$app->request->get();
+        UploadValidator::validateRequest($request);
 
         $formats = json_decode($request['formats'], true);
 
@@ -42,6 +41,17 @@ class ImageController extends ApiController
      */
     public function actionRemove()
     {
-        RemoveValidator::validateRequest();
+        $request = \Yii::$app->request->get();
+        RemoveValidator::validateRequest($request);
+
+        $filePath = \Yii::$app->params['cdn']['outputPath'] . DIRECTORY_SEPARATOR . $request['source'];
+
+        unlink($filePath);
+
+        if (file_exists($filePath)) {
+            throw new \Exception('Can\'t remove file');
+        }
+
+        return [];
     }
 }
