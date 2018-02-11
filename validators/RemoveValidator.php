@@ -7,8 +7,8 @@
  */
 
 namespace app\validators;
-use yii\base\Exception;
 
+use yii\base\Exception;
 
 /**
  * Валидатор для удаления изображения

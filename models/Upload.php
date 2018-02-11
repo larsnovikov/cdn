@@ -214,7 +214,6 @@ class Upload
      */
     private function optimize()
     {
-        var_dump("jpegoptim --strip-all --all-progressive -ptm100 {$this->outFileName}");
         exec("jpegoptim --strip-all --all-progressive -ptm100 {$this->outFileName}");
     }
 }

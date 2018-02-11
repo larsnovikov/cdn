@@ -29,8 +29,7 @@ class UploadValidator
      *         'background' => [
      *             'color' => '000'
      *         ],
-     *         'maximize' => 'mode_1',
-     *         'minimaze' => 'mode_2'
+     *         'margins' => true
      *     ],
      *     'medium' => [
      *         'name' => 'medium',
@@ -39,8 +38,7 @@ class UploadValidator
      *         'background' => [
      *             'color' => '000'
      *         ],
-     *         'maximize' => 'mode_2',
-     *         'minimaze' => 'mode_1'
+     *         'margins' => false
      *     ]
      * ]
      * @param $formats
@@ -55,11 +53,40 @@ class UploadValidator
         }
 
         foreach ($formats as $format) {
+
+            // проверки на наличие параметров в запросе
             if (!array_key_exists('name', $format)) {
                 throw new Exception('Format param \'name\' does not exists!');
             }
+            if (!array_key_exists('height', $format)) {
+                throw new Exception('Format param \'height\' does not exists!');
+            }
+            if (!array_key_exists('width', $format)) {
+                throw new Exception('Format param \'width\' does not exists!');
+            }
+            if (!array_key_exists('background', $format)) {
+                throw new Exception('Format param \'background\' does not exists!');
+            }
+            if (!array_key_exists('margins', $format)) {
+                throw new Exception('Format param \'margins\' does not exists!');
+            }
+            if (!array_key_exists('optimize', $format)) {
+                throw new Exception('Format param \'optimize\' does not exists!');
+            }
 
-            // TODO тут должна быть валидация методов обработки
+            // проверки на валидность
+            if (!is_int($format['width'])) {
+                throw new Exception('Format param \'width\' must be int');
+            }
+            if (!is_int($format['height'])) {
+                throw new Exception('Format param \'height\' must be int');
+            }
+            if (!is_bool($format['margins'])) {
+                throw new Exception('Format param \'margins\' must be boolean');
+            }
+            if (!is_bool($format['optimize'])) {
+                throw new Exception('Format param \'optimize\' must be boolean');
+            }
         }
     }
 
