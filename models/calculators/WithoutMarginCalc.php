@@ -48,6 +48,9 @@ class WithoutMarginCalc implements InterfaceCalc
     {
     }
 
+    /**
+     *
+     */
     public function beforeExecution()
     {
         $mode    = ImageInterface::THUMBNAIL_OUTBOUND;
@@ -64,7 +67,12 @@ class WithoutMarginCalc implements InterfaceCalc
             $thumbHeight = UploadRequestStorage::getObject()->fromParams['height'];
         }
 
-        $size = new Box($thumbWidth, $thumbHeight);
+        //  если включена ротация, перевернем размеры
+        if (UploadRequestStorage::getObject()->rotate) {
+            $size = new Box($thumbHeight, $thumbWidth);
+        } else {
+            $size = new Box($thumbWidth, $thumbHeight);
+        }
 
         UploadRequestStorage::getObject()->source = $imagine->open(UploadRequestStorage::getObject()->sourcePath)
             ->thumbnail($size, $mode);
