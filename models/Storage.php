@@ -70,11 +70,20 @@ class Storage extends \yii\db\ActiveRecord
             }
             if ($storageItem->free_size > $maxSize) {
                 $maxSize = $storageItem->free_size;
-                $directory = $path;
+                $directory = DIRECTORY_SEPARATOR . $storageItem->name;
             }
         }
 
         return $directory;
+    }
+
+    /**
+     * @param $path
+     * @return string
+     */
+    public static function getFullPath($path)
+    {
+        return \Yii::$app->params['cdn']['outputPath'] . DIRECTORY_SEPARATOR . $path;
     }
 }
 

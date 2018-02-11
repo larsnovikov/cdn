@@ -37,7 +37,7 @@ class ApiController extends ActiveController
         $userIp = \Yii::$app->request->getUserIP();
 
         // в списке фронтендов поищим с этим ip
-        if (!isset(\Yii::$app->params['cdn']['frontends'][$userIp])) {
+        if (!array_key_exists($userIp, \Yii::$app->params['cdn']['frontends'])) {
             throw new \Exception('Frontend server not found');
         }
     }

@@ -19,6 +19,7 @@ use yii\base\Exception;
 class RemoveValidator
 {
     /**
+     * @param $request
      * @throws Exception
      */
     public static function validateRequest($request)

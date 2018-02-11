@@ -81,6 +81,11 @@ class Upload
     public $outFileName = '';
 
     /**
+     * @var string
+     */
+    public $webFileName = '';
+
+    /**
      * @var array
      */
     public $watermarkParams = [];
@@ -137,12 +142,13 @@ class Upload
         $calculationClass = new $this->calculationClass();
         $calculationClass->beforeExecution();
 
-        $this->outFileName = Storage::chooseStorage()
-            . DIRECTORY_SEPARATOR. time()
-            . '_' . $this->format['width']
-            . '_' . $this->format['height']
+        $this->webFilePath = Storage::chooseStorage()
+            . DIRECTORY_SEPARATOR . $this->format['name']
+            . '_' . time()
             . '_' . rand(0, 99999)
             . '.jpg';
+
+        $this->outFileName = Storage::getFullPath($this->webFilePath);
     }
 
     /**
@@ -205,7 +211,7 @@ class Upload
         $this->image->paste($this->source, new Point($calculatedParams['left_margin'], $calculatedParams['top_margin']));
 
         if ($this->format['watermark']['image']) {
-            Watermark::create($this->image);
+            Watermark::create();
         }
 
         $this->image->save($this->outFileName);
@@ -214,7 +220,7 @@ class Upload
             $this->optimize();
         }
 
-        return $this->outFileName;
+        return $this->webFilePath;
     }
 
     /**

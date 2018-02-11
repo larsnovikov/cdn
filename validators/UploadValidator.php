@@ -145,6 +145,7 @@ class UploadValidator
     }
 
     /**
+     * @param $request
      * @throws Exception
      */
     public static function validateRequest($request)
