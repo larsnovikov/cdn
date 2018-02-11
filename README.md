@@ -26,9 +26,9 @@
 <p>
     Перед работой необходимо добавить в файл config/cdn-local.php следующие параметры:
     <pre>
-        'inputPath' => 'C:\OpenServer\domains\cdn.loc\directory\input', (1)
-        'outputPath' => 'C:\OpenServer\domains\cdn.loc\directory\output', (2)
-        'watermarkPath' => 'C:\OpenServer\domains\cdn.loc\directory\watermark' (3)
+        'inputPath' => '/var/www/input', (1)
+        'outputPath' => '/var/www/output', (2)
+        'watermarkPath' => '/var/www/watermark' (3)
     </pre>
 </p>
 <h5>Примечания</h5>
