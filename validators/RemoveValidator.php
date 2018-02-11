@@ -7,6 +7,7 @@
  */
 
 namespace app\validators;
+use yii\base\Exception;
 
 
 /**
@@ -17,9 +18,19 @@ namespace app\validators;
  */
 class RemoveValidator
 {
-    public static function validateRequest()
+    /**
+     * @throws Exception
+     */
+    public static function validateRequest($request)
     {
-        $request = \Yii::$app->request->get();
-        var_dump($request); exit;
+        // проверим наличие параметра исходика
+        if (!array_key_exists('source', $request)) {
+            throw new Exception('Source param does not exists!');
+        }
+
+        $filePath  = \Yii::$app->params['cdn']['outputPath'] . DIRECTORY_SEPARATOR . $request['source'];
+        if (!file_exists($filePath)) {
+            throw new Exception('File not found');
+        }
     }
 }

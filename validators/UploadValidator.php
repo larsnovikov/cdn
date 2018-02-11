@@ -66,10 +66,8 @@ class UploadValidator
     /**
      * @throws Exception
      */
-    public static function validateRequest()
+    public static function validateRequest($request)
     {
-        $request = \Yii::$app->request->get();
-
         // проверим наличие параметра исходика
         if (!array_key_exists('source', $request)) {
             throw new Exception('Source param does not exists!');
