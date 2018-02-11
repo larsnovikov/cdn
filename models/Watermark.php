@@ -43,8 +43,9 @@ class Watermark
     /**
      * @return \Imagine\Gd\Image|\Imagine\Image\ImageInterface
      */
-    public static function create($palette)
+    public static function create()
     {
+        $image = Upload::getObject()->image;
         $watermarkParams = Upload::getObject()->watermarkParams;
 
         $resizeWidth = $watermarkParams['width'];
@@ -54,8 +55,8 @@ class Watermark
         $imagine = new Imagine();
         $watermark = $imagine->open($watermarkPath)->resize(new Box($resizeWidth, $resizeHeight));
 
-        /** @var \Imagine\Imagick\Image $palette */
-        $size = $palette->getSize();
+        /** @var \Imagine\Imagick\Image $image */
+        $size = $image->getSize();
         $wSize = $watermark->getSize();
 
         switch ($watermarkParams['position']) {
@@ -83,6 +84,6 @@ class Watermark
 
         $position = new Point($leftMargin, $topMargin);
 
-        $palette->paste($watermark, $position);
+        Upload::getObject()->image = $image->paste($watermark, $position);
     }
 }

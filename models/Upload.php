@@ -14,7 +14,6 @@ use app\models\calculators\WithMarginCalc;
 use app\models\calculators\WithoutMarginCalc;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
-use Imagine\Imagick\Image;
 use Imagine\Imagick\Imagine;
 
 class Upload
@@ -28,10 +27,6 @@ class Upload
      * @var Imagine|null
      */
     public $image = null;
-    /**
-     * @var \Imagine\Gd\Image|\Imagine\Image\ImageInterface|null
-     */
-    public $palette = null;
 
     /**
      * @var \Imagine\Image\ImageInterface|\Imagine\Imagick\Image|null
@@ -197,9 +192,8 @@ class Upload
     public function build()
     {
         // создаем подложку размером с выходное и указанным цветом
-        $this->palette = Palette::create();
-        $image = new Imagine();
-        $palette = $image->create(new Box($this->format['width'], $this->format['height']), $this->palette);
+        $this->image = new Imagine();
+        $this->image = $this->image->create(new Box($this->format['width'], $this->format['height']), Palette::create());
 
         // расчитываем параметры
         $calculatedParams = Calculate::execute();;
@@ -208,13 +202,13 @@ class Upload
         $this->source->resize(new Box($calculatedParams['width'], $calculatedParams['height']));
 
         // собираем картинку
-        $palette->paste($this->source, new Point($calculatedParams['left_margin'], $calculatedParams['top_margin']));
+        $this->image->paste($this->source, new Point($calculatedParams['left_margin'], $calculatedParams['top_margin']));
 
         if ($this->format['watermark']['image']) {
-            Watermark::create($palette);
+            Watermark::create($this->image);
         }
 
-        $palette->save($this->outFileName);
+        $this->image->save($this->outFileName);
 
         if ($this->format['optimize']) {
             $this->optimize();
