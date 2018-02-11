@@ -202,6 +202,19 @@ class Upload
         $palette->paste($this->source, new Point($calculatedParams['left_margin'], $calculatedParams['top_margin']))
             ->save($this->outFileName);
 
+        if ($this->format['optimize']) {
+            $this->optimize();
+        }
+
         return $this->outFileName;
+    }
+
+    /**
+     * Оптимизация картинки
+     */
+    private function optimize()
+    {
+        var_dump("jpegoptim --strip-all --all-progressive -ptm100 {$this->outFileName}");
+        exec("jpegoptim --strip-all --all-progressive -ptm100 {$this->outFileName}");
     }
 }

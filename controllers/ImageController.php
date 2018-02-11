@@ -14,7 +14,6 @@ use Yii;
  */
 class ImageController extends ApiController
 {
-
     /**
      * Загрузка изображения
      */
@@ -28,7 +27,6 @@ class ImageController extends ApiController
         $out = [];
 
         foreach ($formats as $format) {
-
             $object = Upload::getObject(true, $request['source'], $format);
             $out[$format['name']] = $object->build();
         }
