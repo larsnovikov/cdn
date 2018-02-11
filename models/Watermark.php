@@ -23,10 +23,12 @@ class Watermark
      */
     public static function create($palette)
     {
-        $resizeWidth = Upload::getObject()->format['watermark']['width'];
-        $resizeHeight = Upload::getObject()->format['watermark']['height'];
+        $watermarkParams = Upload::getObject()->watermarkParams;
 
-        $watermarkPath = \Yii::$app->params['cdn']['watermarkPath'] . DIRECTORY_SEPARATOR . Upload::getObject()->format['watermark']['image'];
+        $resizeWidth = $watermarkParams['width'];
+        $resizeHeight = $watermarkParams['height'];
+
+        $watermarkPath = \Yii::$app->params['cdn']['watermarkPath'] . DIRECTORY_SEPARATOR . $watermarkParams['image'];
         $imagine = new Imagine();
         $watermark = $imagine->open($watermarkPath)->resize(new Box($resizeWidth, $resizeHeight));
 

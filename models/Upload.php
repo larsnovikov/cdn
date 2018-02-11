@@ -86,6 +86,11 @@ class Upload
     public $outFileName = '';
 
     /**
+     * @var array
+     */
+    public $watermarkParams = [];
+
+    /**
      * @var Upload|null
      */
     private static $object = null;
@@ -105,6 +110,9 @@ class Upload
 
         // пишем запрос формата
         $this->format = $format;
+
+        // пишем параметры вотермарка
+        $this->watermarkParams = $format['watermark'];
 
         // выбираем класс для обработки с ушами/без ушей
         if ($format['margins']) {
