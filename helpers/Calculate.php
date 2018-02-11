@@ -8,7 +8,7 @@
  */
 namespace app\helpers;
 
-use app\models\calculators\InterfaceCalc;
+use app\models\calculators\Calc;
 use app\models\Upload;
 
 /**
@@ -17,14 +17,12 @@ use app\models\Upload;
  */
 class Calculate
 {
-
-
     /**
      * Получить результирующие параметры
      *
      * @return array
      */
-    public static function getParams()
+    private static function getParams()
     {
         if (!Upload::getObject()->rotate) {
             return [
@@ -49,14 +47,17 @@ class Calculate
     public static function execute()
     {
         $object = Upload::getObject();
+
+        /** @var Calc $calculationClass */
+        $calculationClass = new $object->calculationClass();
         if ($object->fromParams['width'] > $object->toParams['width'] && $object->fromParams['height'] > $object->toParams['height']) {
             // minimaze image
-            self::minimaze();
+            $calculationClass->minimaze();
         } elseif ($object->fromParams['width'] < $object->toParams['width'] && $object->fromParams['height'] < $object->toParams['height']) {
             // maximize image
-            self::maximize();
+            $calculationClass->maximize();
         } else {
-            self::customize();
+            $calculationClass->customize();
         }
 
         // TODO это проверка соотношения сторон исходника и выходного изображения
@@ -65,6 +66,8 @@ class Calculate
       //  var_dump($fromCoef, $outCoef);
 
         self::margins();
+
+        return self::getParams();
     }
 
     /**
@@ -75,38 +78,5 @@ class Calculate
         $object = Upload::getObject();
         $object->params['param_2_margin'] = ($object->toParams['height'] - $object->params['param_2']) / 2;
         $object->params['param_1_margin'] = ($object->toParams['width'] - $object->params['param_1']) / 2;
-    }
-
-    /**
-     * При уменьшении
-     */
-    private static function minimaze()
-    {
-        $object = Upload::getObject();
-        /** @var InterfaceCalc $calculationClass */
-        $calculationClass = new $object->calculationClass();
-
-        $calculationClass->minimaze();
-    }
-
-    private static function customize()
-    {
-        $object = Upload::getObject();
-        /** @var InterfaceCalc $calculationClass */
-        $calculationClass = new $object->calculationClass();
-
-        $calculationClass->customize();
-    }
-
-    /**
-     * При увеличении
-     */
-    private static function maximize()
-    {
-        $object = Upload::getObject();
-        /** @var InterfaceCalc $calculationClass */
-        $calculationClass = new $object->calculationClass();
-
-        $calculationClass->maximize();
     }
 }

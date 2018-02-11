@@ -192,8 +192,7 @@ class Upload
         $palette = $image->create(new Box($this->format['width'], $this->format['height']), $this->palette);
 
         // расчитываем параметры
-        Calculate::execute();
-        $calculatedParams = Calculate::getParams();
+        $calculatedParams = Calculate::execute();;
 
         // ресайзим исходное изображение
         $this->source->resize(new Box($calculatedParams['width'], $calculatedParams['height']));
