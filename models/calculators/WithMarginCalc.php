@@ -8,15 +8,13 @@
 
 namespace app\models\calculators;
 
-
-use app\helpers\Calculate;
 use app\models\Upload;
 
 /**
  * Class WithMarginCalc
  * @package app\models\calculators
  */
-class WithMarginCalc implements InterfaceCalc
+class WithMarginCalc extends Calc
 {
     /**
      * @return string

@@ -6,9 +6,8 @@
  * Time: 14:40
  */
 
-namespace app\models\parts;
+namespace app\models;
 
-use app\models\Upload;
 use Imagine\Image\Palette\RGB;
 
 /**

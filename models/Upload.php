@@ -12,7 +12,6 @@ use app\helpers\Calculate;
 use app\models\calculators\InterfaceCalc;
 use app\models\calculators\WithMarginCalc;
 use app\models\calculators\WithoutMarginCalc;
-use app\models\parts\Palette;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Imagick\Imagine;
@@ -79,12 +78,21 @@ class Upload
      */
     public $calculationClass;
 
+    /**
+     * @var string
+     */
     public $outFileName = '';
 
-
-
+    /**
+     * @var Upload|null
+     */
     private static $object = null;
 
+    /**
+     * Upload constructor.
+     * @param $source
+     * @param $format
+     */
     public function __construct($source, $format)
     {
         // пишем себя в атрибут
@@ -132,6 +140,14 @@ class Upload
             . '.jpg';
     }
 
+    /**
+     * Получение объекта
+     *
+     * @param bool $force
+     * @param bool $source
+     * @param array $format
+     * @return Upload|null
+     */
     public static function getObject($force = false, $source = false, $format = [])
     {
         if (self::$object === null || $force) {
@@ -163,6 +179,11 @@ class Upload
         }
     }
 
+    /**
+     * Собрать все воедино
+     *
+     * @return string
+     */
     public function build()
     {
         // создаем подложку размером с выходное и указанным цветом

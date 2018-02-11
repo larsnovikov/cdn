@@ -17,7 +17,7 @@ use Imagine\Imagick\Imagine;
  * Class WithoutMarginCalc
  * @package app\models\calculators
  */
-class WithoutMarginCalc implements InterfaceCalc
+class WithoutMarginCalc extends Calc
 {
     /**
      * @return string
@@ -25,27 +25,6 @@ class WithoutMarginCalc implements InterfaceCalc
     public static function getClassName()
     {
         return __CLASS__;
-    }
-
-    /**
-     *
-     */
-    public function maximize()
-    {
-    }
-
-    /**
-     *
-     */
-    public function minimaze()
-    {
-    }
-
-    /**
-     *
-     */
-    public function customize()
-    {
     }
 
     /**

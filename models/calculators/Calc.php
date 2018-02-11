@@ -9,25 +9,31 @@
 namespace app\models\calculators;
 
 /**
- * Interface InterfaceCalc
+ * Class Calc
  * @package app\models\calculators
  */
-interface InterfaceCalc
+abstract class Calc
 {
     /**
+     * Предобработка
+     *
      * @return mixed
      */
-    public function maximize();
+    abstract public function beforeExecution();
 
     /**
      * @return mixed
      */
-    public function minimaze();
+    public function maximize()
+    {}
 
     /**
      * @return mixed
      */
-    public function customize();
+    public function minimaze(){}
 
-    public function beforeExecution();
+    /**
+     * @return mixed
+     */
+    public function customize(){}
 }
