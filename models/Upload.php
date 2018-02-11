@@ -10,11 +10,11 @@ namespace app\models;
 
 use app\helpers\Calculate;
 use app\models\calculators\Calc;
-use app\models\calculators\InterfaceCalc;
 use app\models\calculators\WithMarginCalc;
 use app\models\calculators\WithoutMarginCalc;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
+use Imagine\Imagick\Image;
 use Imagine\Imagick\Imagine;
 
 class Upload
@@ -32,6 +32,7 @@ class Upload
      * @var \Imagine\Gd\Image|\Imagine\Image\ImageInterface|null
      */
     public $palette = null;
+
     /**
      * @var \Imagine\Image\ImageInterface|\Imagine\Imagick\Image|null
      */
@@ -85,6 +86,11 @@ class Upload
     public $outFileName = '';
 
     /**
+     * @var array
+     */
+    public $watermarkParams = [];
+
+    /**
      * @var Upload|null
      */
     private static $object = null;
@@ -104,6 +110,9 @@ class Upload
 
         // пишем запрос формата
         $this->format = $format;
+
+        // пишем параметры вотермарка
+        $this->watermarkParams = $format['watermark'];
 
         // выбираем класс для обработки с ушами/без ушей
         if ($format['margins']) {
@@ -199,8 +208,13 @@ class Upload
         $this->source->resize(new Box($calculatedParams['width'], $calculatedParams['height']));
 
         // собираем картинку
-        $palette->paste($this->source, new Point($calculatedParams['left_margin'], $calculatedParams['top_margin']))
-            ->save($this->outFileName);
+        $palette->paste($this->source, new Point($calculatedParams['left_margin'], $calculatedParams['top_margin']));
+
+        if ($this->format['watermark']['image']) {
+            Watermark::create($palette);
+        }
+
+        $palette->save($this->outFileName);
 
         if ($this->format['optimize']) {
             $this->optimize();

@@ -8,6 +8,7 @@
 
 namespace app\validators;
 
+use app\models\Watermark;
 use yii\base\Exception;
 
 /**
@@ -26,6 +27,13 @@ class UploadValidator
     ];
 
     /**
+     * @var array
+     */
+    private static $validWatermarkTypes = [
+        'image/png'
+    ];
+
+    /**
      * Вадидатор массива параметров
      * Пример
      * [
@@ -37,7 +45,13 @@ class UploadValidator
      *             'color' => '000'
      *         ],
      *         'margins' => true,
-     *         'optimize' => true
+     *         'optimize' => true,
+     *         'watermark' => [
+     *             'image' => '',
+     *             'width' => 500,
+     *             'height' => 500,
+     *             'position' => 'pos_center'
+     *         ]
      *     ],
      *     'medium' => [
      *         'name' => 'medium',
@@ -95,6 +109,37 @@ class UploadValidator
             }
             if (!is_bool($format['optimize'])) {
                 throw new Exception('Format param \'optimize\' must be boolean');
+            }
+
+            // проверка вотермарка
+            if (array_key_exists('watermark', $format)) {
+                if (!array_key_exists('image', $format['watermark'])) {
+                    throw new Exception('Watermark param \'image\' does not exists!');
+                }
+                if (!array_key_exists('width', $format['watermark'])) {
+                    throw new Exception('Watermark param \'width\' does not exists!');
+                }
+                if (!array_key_exists('height', $format['watermark'])) {
+                    throw new Exception('Watermark param \'height\' does not exists!');
+                }
+                if (!array_key_exists('position', $format['watermark'])) {
+                    throw new Exception('Watermark param \'position\' does not exists!');
+                }
+
+                // проверка файла
+                $filePath = \Yii::$app->params['cdn']['watermarkPath'] . DIRECTORY_SEPARATOR . $format['watermark']['image'];
+                if (!file_exists($filePath)) {
+                    throw new Exception('Watermark source file does not exists!');
+                }
+
+                if (!in_array(mime_content_type($filePath), self::$validWatermarkTypes)) {
+                    throw new Exception('Invalid mime type of watermark source file!');
+                }
+
+                // проверка правильно ли указана позиция
+                if (!in_array($format['watermark']['position'], Watermark::POSITIONS)) {
+                    throw new Exception('Watermark param \'position\' is not valid');
+                }
             }
         }
     }
