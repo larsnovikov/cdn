@@ -23,7 +23,8 @@ class UploadValidator
      * @var array
      */
     private static $validFileTypes = [
-        'image/jpeg'
+        'image/jpeg',
+        'image/png'
     ];
 
     /**
