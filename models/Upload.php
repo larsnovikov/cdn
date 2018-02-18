@@ -19,6 +19,13 @@ use Imagine\Imagick\Imagine;
 class Upload
 {
     /**
+     * Сопоставление mime и формата
+     */
+    const MIME_TYPE_MAP = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png'
+    ];
+    /**
      * @var null|string
      */
     public $sourcePath = null;
@@ -91,6 +98,11 @@ class Upload
     public $watermarkParams = [];
 
     /**
+     * @var string
+     */
+    public $fileType = '';
+
+    /**
      * @var Upload|null
      */
     private static $object = null;
@@ -137,6 +149,8 @@ class Upload
             'height' => $this->format['height']
         ]);
 
+        $this->fileType = self::MIME_TYPE_MAP[mime_content_type($this->sourcePath)];
+
         // выполняем предобработку
         /** @var Calc $calculationClass */
         $calculationClass = new $this->calculationClass();
@@ -146,7 +160,7 @@ class Upload
             . DIRECTORY_SEPARATOR . $this->format['name']
             . '_' . time()
             . '_' . rand(0, 99999)
-            . '.jpg';
+            . '.' . $this->fileType;
 
         $this->outFileName = Storage::getFullPath($this->webFilePath);
     }
