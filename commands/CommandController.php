@@ -2,7 +2,6 @@
 
 namespace app\commands;
 
-use app\models\Storage;
 use yii\console\Controller;
 use yii\helpers\FileHelper;
 
@@ -23,8 +22,5 @@ class CommandController extends Controller
 
         // TODO примонтировать директорию
 
-        $storage = new Storage();
-        $storage->name = $name;
-        $storage->save();
     }
 }
