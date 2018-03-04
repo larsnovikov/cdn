@@ -3,5 +3,6 @@
 return [
     'inputPath' => '{{inputPath}}', 
     'outputPath' => '{{outputPath}}', 
-    'watermarkPath' => '{{watermarkPath}}' 
+    'watermarkPath' => '{{watermarkPath}}',
+    'frontends' => json_decode('{{frontends}}', true)
 ];

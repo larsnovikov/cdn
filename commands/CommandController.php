@@ -61,4 +61,31 @@ class CommandController extends Controller
 
         return self::EXIT_CODE_NORMAL;
     }
+
+    /**
+     * Добавление списка фронтендов
+     */
+    public function actionAddFrontends(string $frontends): int
+    {
+        $frontends = explode(',', $frontends);
+
+        $outFrontends = [];
+        foreach ($frontends as $frontend) {
+            $outFrontends[$frontend] = [];
+        }
+
+        $configTpl = file_get_contents(\Yii::getAlias('@app/config/cdn-local.php'));
+
+        $content = str_replace([
+            '{{frontends}}'
+        ], [
+            json_encode($outFrontends)
+        ], $configTpl);
+
+        $out = fopen(\Yii::getAlias('@app/config/cdn-local.php'), 'w');
+        fwrite($out, $content);
+        fclose($out);
+
+        return self::EXIT_CODE_NORMAL;
+    }
 }
