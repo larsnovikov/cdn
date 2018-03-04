@@ -36,6 +36,10 @@ class ApiController extends ActiveController
 
         $userIp = \Yii::$app->request->getUserIP();
 
+        if (!array_key_exists('frontends',  \Yii::$app->params['cdn'])) {
+            throw new \Exception('Frontend servers not set');
+        }
+
         // в списке фронтендов поищим с этим ip
         if (!array_key_exists($userIp, \Yii::$app->params['cdn']['frontends'])) {
             throw new \Exception('Frontend server not found');
@@ -46,7 +50,7 @@ class ApiController extends ActiveController
      *
      * @param $status
      */
-    public function setStatus($status)
+    public function setStatus(string $status)
     {
         $this->status = $status;
     }
@@ -55,14 +59,14 @@ class ApiController extends ActiveController
      *
      * @return string
      */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->status;
     }
     /**
      * @return array
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         $urlData = parse_url(\Yii::$app->request->getUrl());
         if (isset($urlData['query'])) {
@@ -71,8 +75,10 @@ class ApiController extends ActiveController
         }
         $behaviors = parent::behaviors();
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON;
+
         return $behaviors;
     }
+
     /**
      * @param string $id
      * @param array $params

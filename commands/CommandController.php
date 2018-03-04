@@ -36,7 +36,7 @@ class CommandController extends Controller
         }
 
         if (!file_exists($outputPath)) {
-            FileHelper::createDirectory($inputPath);
+            FileHelper::createDirectory($outputPath);
         }
 
         if (!file_exists($watermarkPath)) {
