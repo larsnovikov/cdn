@@ -23,4 +23,42 @@ class CommandController extends Controller
         // TODO примонтировать директорию
 
     }
+
+    /**
+     * Инициализация
+     */
+    public function actionInit(string $inputPath = '/var/www/input',
+                               string $outputPath = '/var/www/output',
+                               string $watermarkPath = '/var/www/watermark'): int
+    {
+        if (!file_exists($inputPath)) {
+            FileHelper::createDirectory($inputPath);
+        }
+
+        if (!file_exists($outputPath)) {
+            FileHelper::createDirectory($inputPath);
+        }
+
+        if (!file_exists($watermarkPath)) {
+            FileHelper::createDirectory($watermarkPath);
+        }
+
+        $configTpl = file_get_contents(\Yii::getAlias('@app/config/cdn-local.tpl.php'));
+
+        $content = str_replace([
+            '{{inputPath}}',
+            '{{outputPath}}',
+            '{{watermarkPath}}'
+        ], [
+            $inputPath,
+            $outputPath,
+            $watermarkPath
+        ], $configTpl);
+
+        $out = fopen(\Yii::getAlias('@app/config/cdn-local.php'), 'w');
+        fwrite($out, $content);
+        fclose($out);
+
+        return self::EXIT_CODE_NORMAL;
+    }
 }

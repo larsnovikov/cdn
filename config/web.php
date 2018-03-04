@@ -1,7 +1,6 @@
 <?php
 
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db-local.php';
 
 $config = [
     'id' => 'basic',
@@ -46,10 +45,9 @@ $config = [
                 ],
             ],
         ],
-        'db' => $db,
-//        'response' => [
-//            'format' => yii\web\Response::FORMAT_JSON
-//        ],
+        'response' => [
+            'format' => yii\web\Response::FORMAT_JSON
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
