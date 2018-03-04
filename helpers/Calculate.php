@@ -22,7 +22,7 @@ class Calculate
      *
      * @return array
      */
-    private static function getParams()
+    private static function getParams(): array
     {
         if (!Upload::getObject()->rotate) {
             return [

@@ -17,7 +17,7 @@ class ImageController extends ApiController
     /**
      * Загрузка изображения
      */
-    public function actionUpload()
+    public function actionUpload(): array
     {
         $request = \Yii::$app->request->get();
         UploadValidator::validateRequest($request);
@@ -37,7 +37,7 @@ class ImageController extends ApiController
     /**
      * Удаление изображения
      */
-    public function actionRemove()
+    public function actionRemove(): array 
     {
         $request = \Yii::$app->request->get();
         RemoveValidator::validateRequest($request);
