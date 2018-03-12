@@ -43,27 +43,22 @@ class Calculate
 
     /**
      * Обработка
+     * 
+     * @return array
      */
-    public static function execute()
+    public static function execute(): array 
     {
         $object = Upload::getObject();
 
         /** @var Calc $calculationClass */
         $calculationClass = new $object->calculationClass();
         if ($object->fromParams['width'] > $object->toParams['width'] && $object->fromParams['height'] > $object->toParams['height']) {
-            // minimaze image
             $calculationClass->minimaze();
         } elseif ($object->fromParams['width'] < $object->toParams['width'] && $object->fromParams['height'] < $object->toParams['height']) {
-            // maximize image
             $calculationClass->maximize();
         } else {
             $calculationClass->customize();
         }
-
-        // TODO это проверка соотношения сторон исходника и выходного изображения
-      //  $fromCoef = self::$fromParams['width'] / self::$fromParams['height'];
-      //  $outCoef = self::$params['param_1'] / self::$params['param_2'];
-      //  var_dump($fromCoef, $outCoef);
 
         self::margins();
 
@@ -72,8 +67,9 @@ class Calculate
 
     /**
      * Расчет отступа
+     * @return void
      */
-    private static function margins()
+    private static function margins(): void
     {
         $object = Upload::getObject();
         $object->params['param_2_margin'] = ($object->toParams['height'] - $object->params['param_2']) / 2;

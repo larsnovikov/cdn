@@ -16,6 +16,7 @@ use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Imagick\Imagine;
 
+
 class Upload
 {
     /**
@@ -169,11 +170,11 @@ class Upload
      * Получение объекта
      *
      * @param bool $force
-     * @param bool $source
+     * @param string $source
      * @param array $format
      * @return Upload|null
      */
-    public static function getObject($force = false, $source = false, $format = [])
+    public static function getObject(bool $force = false, string $source = false, array $format = [])
     {
         if (self::$object === null || $force) {
             self::$object = new self($source, $format);
@@ -185,10 +186,10 @@ class Upload
     /**
      * Установить размеры входного и выходного
      *
-     * @param $from
-     * @param $to
+     * @param array $from
+     * @param array $to
      */
-    public function setSourceSizes($from, $to)
+    public function setSourceSizes(array $from, array $to): void
     {
         if ($from['width'] > $from['height']) {
             $this->fromParams = $from;
@@ -209,7 +210,7 @@ class Upload
      *
      * @return string
      */
-    public function build()
+    public function build(): string
     {
         // создаем подложку размером с выходное и указанным цветом
         $this->image = new Imagine();
@@ -240,7 +241,7 @@ class Upload
     /**
      * Оптимизация картинки
      */
-    private function optimize()
+    private function optimize(): void
     {
         exec("jpegoptim --strip-all --all-progressive -ptm100 {$this->outFileName}");
     }

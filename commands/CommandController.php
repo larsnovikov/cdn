@@ -12,10 +12,13 @@ use yii\helpers\FileHelper;
 class CommandController extends Controller
 {
     /**
-     * @param $name
+     * Добавление хранилища
+     * 
+     * @param string $name
      * @throws \yii\base\Exception
+     * @return void
      */
-    public function actionAddStorage($name)
+    public function actionAddStorage(string $name): void
     {
         $newPath = \Yii::$app->params['cdn']['outputPath'] . DIRECTORY_SEPARATOR . $name;
         FileHelper::createDirectory($newPath, true);

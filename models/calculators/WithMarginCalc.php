@@ -27,7 +27,7 @@ class WithMarginCalc extends Calc
     /**
      *
      */
-    public function maximize()
+    public function maximize(): void
     {
         Upload::getObject()->params['param_1'] = Upload::getObject()->fromParams['width'];
         Upload::getObject()->params['param_2'] = Upload::getObject()->fromParams['height'];
@@ -36,7 +36,7 @@ class WithMarginCalc extends Calc
     /**
      *
      */
-    public function minimaze()
+    public function minimaze(): void
     {
         // должна влезти и щирина и высота
         // определим базовую сторону
@@ -57,7 +57,7 @@ class WithMarginCalc extends Calc
     /**
      *
      */
-    public function customize()
+    public function customize(): void
     {
         $fromCoef = Upload::getObject()->fromParams['width'] / Upload::getObject()->fromParams['height'];
         $toCoef = Upload::getObject()->toParams['width'] / Upload::getObject()->toParams['height'];
@@ -69,10 +69,5 @@ class WithMarginCalc extends Calc
             Upload::getObject()->params['param_1'] = Upload::getObject()->toParams['height'] * $fromCoef;
             Upload::getObject()->params['param_2'] = Upload::getObject()->toParams['height'];
         }
-    }
-
-    public function beforeExecution()
-    {
-        // TODO: Implement beforeExecution() method.
     }
 }

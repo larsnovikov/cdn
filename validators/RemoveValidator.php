@@ -19,10 +19,10 @@ use yii\base\Exception;
 class RemoveValidator
 {
     /**
-     * @array $request
+     * @param array $request
      * @throws Exception
      */
-    public static function validateRequest(array $request)
+    public static function validateRequest(array $request): void
     {
         // проверим наличие параметра исходика
         if (!array_key_exists('source', $request)) {

@@ -65,10 +65,10 @@ class UploadValidator
      *         'optimize' => true
      *     ]
      * ]
-     * @param $formats
+     * @param array $formats
      * @throws Exception
      */
-    private static function validateFormats(array $formats)
+    private static function validateFormats(array $formats): void
     {
         $formats = json_decode($formats, true);
 
@@ -146,10 +146,10 @@ class UploadValidator
     }
 
     /**
-     * @array $request
+     * @param array $request
      * @throws Exception
      */
-    public static function validateRequest(array $request)
+    public static function validateRequest(array $request): void
     {
         // проверим наличие параметра исходика
         if (!array_key_exists('source', $request)) {
