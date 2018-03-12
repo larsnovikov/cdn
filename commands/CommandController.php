@@ -21,7 +21,7 @@ class CommandController extends Controller
     public function actionAddStorage(string $name): void
     {
         $newPath = \Yii::$app->params['cdn']['outputPath'] . DIRECTORY_SEPARATOR . $name;
-        FileHelper::createDirectory($newPath, true);
+        FileHelper::createDirectory($newPath, 0777, true);
 
         // TODO примонтировать директорию
 
@@ -40,15 +40,15 @@ class CommandController extends Controller
                                string $watermarkPath = '/var/www/watermark'): int
     {
         if (!file_exists($inputPath)) {
-            FileHelper::createDirectory($inputPath);
+            FileHelper::createDirectory($inputPath, true);
         }
 
         if (!file_exists($outputPath)) {
-            FileHelper::createDirectory($outputPath, 0777);
+            FileHelper::createDirectory($outputPath, 0777, true);
         }
 
         if (!file_exists($watermarkPath)) {
-            FileHelper::createDirectory($watermarkPath);
+            FileHelper::createDirectory($watermarkPath, true);
         }
 
         $configTpl = file_get_contents(\Yii::getAlias('@app/config/cdn-local.tpl.php'));

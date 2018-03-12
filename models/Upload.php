@@ -170,11 +170,11 @@ class Upload
      * Получение объекта
      *
      * @param bool $force
-     * @param string $source
+     * @param string|bool $source
      * @param array $format
      * @return Upload|null
      */
-    public static function getObject(bool $force = false, string $source = false, array $format = [])
+    public static function getObject(bool $force = false, $source = false, array $format = [])
     {
         if (self::$object === null || $force) {
             self::$object = new self($source, $format);
