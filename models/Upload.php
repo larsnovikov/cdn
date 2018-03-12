@@ -110,10 +110,10 @@ class Upload
 
     /**
      * Upload constructor.
-     * @param $source
-     * @param $format
+     * @param string $source
+     * @param array $format
      */
-    public function __construct($source, $format)
+    public function __construct(string $source, array $format)
     {
         // пишем себя в атрибут
         self::$object = $this;
@@ -170,11 +170,11 @@ class Upload
      * Получение объекта
      *
      * @param bool $force
-     * @param string|bool $source
+     * @param string $source
      * @param array $format
      * @return Upload|null
      */
-    public static function getObject(bool $force = false, $source = false, array $format = [])
+    public static function getObject(bool $force = false, string $source = '', array $format = [])
     {
         if (self::$object === null || $force) {
             self::$object = new self($source, $format);
