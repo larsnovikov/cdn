@@ -26,6 +26,11 @@ class CommandController extends Controller
 
     /**
      * Инициализация
+     *
+     * @param string $inputPath
+     * @param string $outputPath
+     * @param string $watermarkPath
+     * @return int
      */
     public function actionInit(string $inputPath = '/var/www/input',
                                string $outputPath = '/var/www/output',
@@ -64,6 +69,9 @@ class CommandController extends Controller
 
     /**
      * Добавление списка фронтендов
+     *
+     * @param string $frontends
+     * @return int
      */
     public function actionAddFrontends(string $frontends): int
     {
