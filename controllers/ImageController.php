@@ -7,6 +7,7 @@ use app\prototypes\ApiController;
 use app\validators\RemoveValidator;
 use app\validators\UploadValidator;
 use Yii;
+use yii\base\Exception;
 
 /**
  * Class ImageController
@@ -16,6 +17,8 @@ class ImageController extends ApiController
 {
     /**
      * Загрузка изображения
+     * 
+     * @return array
      */
     public function actionUpload(): array
     {
@@ -36,6 +39,9 @@ class ImageController extends ApiController
 
     /**
      * Удаление изображения
+     * 
+     * @throws \Exception
+     * @return array
      */
     public function actionRemove(): array 
     {

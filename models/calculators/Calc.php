@@ -19,13 +19,12 @@ abstract class Calc
      *
      * @return mixed
      */
-    abstract public function beforeExecution();
+    public function beforeExecution(){}
 
     /**
      * @return mixed
      */
-    public function maximize()
-    {}
+    public function maximize(){}
 
     /**
      * @return mixed

@@ -11,7 +11,7 @@ class Storage
      *
      * @return string
      */
-    public static function chooseStorage()
+    public static function chooseStorage(): string 
     {
         $storagePaths = scandir(\Yii::$app->params['cdn']['outputPath'] . DIRECTORY_SEPARATOR);
 
@@ -33,10 +33,10 @@ class Storage
     }
 
     /**
-     * @param $path
+     * @param  string $path
      * @return string
      */
-    public static function getFullPath($path)
+    public static function getFullPath(string $path): string
     {
         return \Yii::$app->params['cdn']['outputPath'] . DIRECTORY_SEPARATOR . $path;
     }

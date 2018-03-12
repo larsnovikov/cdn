@@ -13,7 +13,7 @@ class ApiException extends \yii\base\ErrorHandler
     /**
      * @param \Error|\Exception $exception
      */
-    protected function renderException($exception)
+    protected function renderException($exception): void
     {
         if (\Yii::$app->has('response')) {
             $response = \Yii::$app->getResponse();
@@ -26,6 +26,7 @@ class ApiException extends \yii\base\ErrorHandler
                 'message' => $exception->getMessage()
             ]
         ];
+        
         $response->send();
     }
 }

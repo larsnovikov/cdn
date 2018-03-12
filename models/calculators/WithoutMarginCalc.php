@@ -22,7 +22,7 @@ class WithoutMarginCalc extends Calc
     /**
      * @return string
      */
-    public static function getClassName()
+    public static function getClassName(): string
     {
         return __CLASS__;
     }
@@ -30,7 +30,7 @@ class WithoutMarginCalc extends Calc
     /**
      *
      */
-    public function beforeExecution()
+    public function beforeExecution(): void
     {
         $mode    = ImageInterface::THUMBNAIL_OUTBOUND;
         $imagine = new Imagine();

@@ -23,12 +23,14 @@ class ApiController extends ActiveController
      * @var string
      */
     private $status = 'success';
+    
     /**
      * Проверяет, может ли пользователь обратиться к серверу
      *
      * @throws \Exception
+     * @return void
      */
-    private function canRequest()
+    private function canRequest(): void
     {
         if (\Yii::$app->request->method !== 'POST') {
             throw new \Exception('Invalid request method');
@@ -45,15 +47,18 @@ class ApiController extends ActiveController
             throw new \Exception('Frontend server not found');
         }
     }
+    
     /**
      * Установка статуса
      *
      * @param $status
+     * @return void
      */
-    public function setStatus(string $status)
+    public function setStatus(string $status): void
     {
         $this->status = $status;
     }
+    
     /**
      * Получение статуса
      *
@@ -63,6 +68,7 @@ class ApiController extends ActiveController
     {
         return $this->status;
     }
+    
     /**
      * @return array
      */
