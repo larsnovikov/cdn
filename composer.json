@@ -27,7 +27,9 @@
 
         "codeception/base": "^2.2.3",
         "codeception/verify": "~0.3.1",
-        "codeception/specify": "~0.4.3"
+        "codeception/specify": "~0.4.3",
+        "phpunit/phpunit": "^5.7",
+        "codeception/codeception": "^2.4"
     },
     "config": {
         "process-timeout": 1800
