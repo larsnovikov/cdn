@@ -38,8 +38,8 @@ class CommandController extends Controller
         foreach ($frontends as $frontend) {
             $outFrontends[$frontend] = [];
         }
-
-        $configTpl = file_get_contents(\Yii::getAlias('@app/config/cdn-local.php'));
+        
+        $configTpl = file_get_contents(\Yii::getAlias('@app/config/cdn-local.tpl.php'));
 
         $content = str_replace([
             '{{frontends}}'
