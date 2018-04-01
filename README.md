@@ -28,8 +28,11 @@
 
 <h3>Конфигурирование перед началом работы</h3>
 <p>
-    Для указания Ip-адресов с которых разрешено принимать запросы необходимо выполнить <pre>php yii command/add-frontends</pre>
-    Для указания директорий хранения переопределите параметры config/cdn.php в config/cdn-local.php
+    <pre>
+        'config/template/cdn-local-tpl.php' => 'config/cdn-local.php'
+        'config/template/db-local-tpl.php' => 'config/db-local.php', 
+    </pre>
+    Скопируйте файлы из config/template в папку config как указано выше, заполните доступы к БД и список ip-адресов с которых разрешено принимать запросы.
 </p>
 
 <h3>Примеры запросов</h3>
