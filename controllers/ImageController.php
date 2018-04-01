@@ -2,12 +2,13 @@
 
 namespace app\controllers;
 
+use app\models\Format;
 use app\models\Upload;
 use app\prototypes\ApiController;
+use app\validators\AddFormatValidator;
+use app\validators\RemoveFormatValidator;
 use app\validators\RemoveValidator;
 use app\validators\UploadValidator;
-use Yii;
-use yii\base\Exception;
 
 /**
  * Class ImageController
@@ -25,7 +26,7 @@ class ImageController extends ApiController
         $request = \Yii::$app->request->get();
         UploadValidator::validateRequest($request);
 
-        $formats = json_decode($request['formats'], true);
+        $formats = $request['formats'];
 
         $out = [];
 
@@ -35,6 +36,45 @@ class ImageController extends ApiController
         }
 
         return $out;
+    }
+
+    /**
+     * Добавление формата
+     *
+     * @throws \Exception
+     * @return array
+     */
+    public function actionAddFormat(): array
+    {
+        $request = \Yii::$app->request->get();
+        AddFormatValidator::validateRequest($request);
+        
+        $format = new Format();
+        $format->name = $request['name'];
+        $format->data = $request['format'];
+        $format->save();
+        
+        return [
+            'message' => 'Format created'
+        ];
+    }
+
+    /**
+     * Удаление формата
+     *
+     * @throws \Exception
+     * @return array
+     */
+    public function removeFormat(): array
+    {
+        $request = \Yii::$app->request->get();
+        RemoveFormatValidator::validateRequest($request);
+
+        $format = Format::deleteAll(['name' => $request['name']]);
+
+        return [
+            'message' => 'Format deleted'
+        ];
     }
 
     /**
