@@ -9,7 +9,6 @@
 namespace app\validators;
 
 use app\models\Format;
-use app\models\Watermark;
 use yii\base\Exception;
 use yii\httpclient\Client;
 
