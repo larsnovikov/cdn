@@ -1,6 +1,7 @@
 <?php
 
 $params = require __DIR__ . '/params.php';
+$db = require __DIR__ . '/db-local.php';
 
 $config = [
     'id' => 'basic-console',
@@ -8,6 +9,7 @@ $config = [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'app\commands',
     'components' => [
+        'db' => $db,
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],

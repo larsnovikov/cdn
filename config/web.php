@@ -1,6 +1,7 @@
 <?php
 
 $params = require __DIR__ . '/params.php';
+$db = require __DIR__ . '/db-local.php';
 
 $config = [
     'id' => 'basic',
@@ -11,6 +12,7 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
+        'db' => $db,
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '91kttbta0-JmGfCrqQXW6ffkyNoqlgVA',
@@ -61,6 +63,8 @@ $config = [
                     'extraPatterns' => [
                         'POST upload' => 'upload',
                         'POST remove' => 'remove',
+                        'POST remove-format' => 'remove-format',
+                        'POST add-format' => 'add-format',
                     ],
                 ],
             ],

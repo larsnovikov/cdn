@@ -41,6 +41,13 @@ class Watermark
     ];
 
     /**
+     * Типы вотерпарков
+     */
+    const TYPES = [
+        'image/png'
+    ];
+
+    /**
      * @return \Imagine\Gd\Image|\Imagine\Image\ImageInterface
      */
     public static function create()
