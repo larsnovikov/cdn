@@ -3,6 +3,7 @@
 namespace app\commands;
 
 use yii\console\Controller;
+use yii\console\ExitCode;
 use yii\helpers\FileHelper;
 
 /**
@@ -16,41 +17,13 @@ class CommandController extends Controller
      * 
      * @param string $name
      * @throws \yii\base\Exception
-     * @return void
+     * @return int
      */
-    public function actionAddStorage(string $name): void
+    public function actionAddStorage(string $name): int
     {
         $newPath = \Yii::$app->params['cdn']['outputPath'] . DIRECTORY_SEPARATOR . $name;
         FileHelper::createDirectory($newPath, 0777, true);
-    }
-    
-    /**
-     * Добавление списка фронтендов
-     *
-     * @param string $frontends
-     * @return int
-     */
-    public function actionAddFrontends(string $frontends): int
-    {
-        $frontends = explode(',', $frontends);
-
-        $outFrontends = [];
-        foreach ($frontends as $frontend) {
-            $outFrontends[$frontend] = [];
-        }
         
-        $configTpl = file_get_contents(\Yii::getAlias('@app/config/cdn-local.tpl.php'));
-
-        $content = str_replace([
-            '{{frontends}}'
-        ], [
-            json_encode($outFrontends)
-        ], $configTpl);
-
-        $out = fopen(\Yii::getAlias('@app/config/cdn-local.php'), 'w');
-        fwrite($out, $content);
-        fclose($out);
-
-        return self::EXIT_CODE_NORMAL;
+        return ExitCode::OK;
     }
 }
