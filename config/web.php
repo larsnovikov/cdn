@@ -65,6 +65,7 @@ $config = [
                         'POST remove' => 'remove',
                         'POST remove-format' => 'remove-format',
                         'POST add-format' => 'add-format',
+                        'POST get-formats' => 'get-formats',
                     ],
                 ],
             ],

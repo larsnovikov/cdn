@@ -65,15 +65,30 @@ class ImageController extends ApiController
      * @throws \Exception
      * @return array
      */
-    public function removeFormat(): array
+    public function actionRemoveFormat(): array
     {
         $request = \Yii::$app->request->get();
         RemoveFormatValidator::validateRequest($request);
 
-        $format = Format::deleteAll(['name' => $request['name']]);
+        Format::deleteAll(['name' => $request['name']]);
 
         return [
             'message' => 'Format deleted'
+        ];
+    }
+
+    /**
+     * Список форматов
+     *
+     * @throws \Exception
+     * @return array
+     */
+    public function actionGetFormats(): array
+    {
+        return [
+            'message' => Format::find()
+                ->asArray()
+                ->all()
         ];
     }
 
