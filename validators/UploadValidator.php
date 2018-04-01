@@ -10,6 +10,7 @@ namespace app\validators;
 
 use app\models\Watermark;
 use yii\base\Exception;
+use yii\httpclient\Client;
 
 /**
  * Валидатор запроса для обработки изображения
@@ -77,7 +78,6 @@ class UploadValidator
         }
 
         foreach ($formats as $format) {
-
             // проверки на наличие параметров в запросе
             if (!array_key_exists('name', $format)) {
                 throw new Exception('Format param \'name\' does not exists!');
@@ -149,11 +149,16 @@ class UploadValidator
      * @param array $request
      * @throws Exception
      */
-    public static function validateRequest(array $request): void
+    public static function validateRequest(array &$request): void
     {
         // проверим наличие параметра исходика
         if (!array_key_exists('source', $request)) {
             throw new Exception('Source param does not exists!');
+        }
+
+        // Если передана ссылка на файл, его надо подтянуть
+        if (filter_var($request['source'], FILTER_VALIDATE_URL)) {
+            $request['source'] = self::getFromUrl($request['source']);
         }
 
         // проверим наличие файла исходника
@@ -172,5 +177,31 @@ class UploadValidator
         }
 
         self::validateFormats($request['formats']);
+    }
+
+    /**
+     * Получить картинку с URL
+     *
+     * @param string $url
+     * @return string
+     */
+    private static function getFromUrl(string $url): string
+    {
+        $client = new Client();
+        $response = $client->createRequest()
+            ->setMethod('get')
+            ->setUrl($url)
+            ->send();
+
+        if (!$response->isOk) {
+            throw new Exception('Can\t load file from url');
+        }
+
+        $fileName = time() . '_' . rand(0, 9999) . '.jpg';
+
+        // сохраним картинку к себе
+        file_put_contents(\Yii::$app->params['cdn']['inputPath'] . DIRECTORY_SEPARATOR . $fileName, $response->getContent());
+
+        return $fileName;
     }
 }
