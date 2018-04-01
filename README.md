@@ -30,7 +30,7 @@
 <p>
     <pre>
         'config/template/cdn-local-tpl.php' => 'config/cdn-local.php'
-        'config/template/db-local-tpl.php' => 'config/db-local.php', 
+        'config/template/db-local-tpl.php' => 'config/db-local.php' 
     </pre>
     Скопируйте файлы из config/template в папку config как указано выше, заполните доступы к БД и список ip-адресов с которых разрешено принимать запросы.
 </p>
