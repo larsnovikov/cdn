@@ -75,7 +75,12 @@ class UploadValidator
             ->asArray()
             ->all();
 
-        $request['formats'] = $formats;
+        $outFormats = [];
+        foreach ($formats as $format) {
+            $outFormats[] = json_decode($format['data'], true);
+        }
+
+        $request['formats'] = $outFormats;
     }
 
     /**
