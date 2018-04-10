@@ -6,8 +6,6 @@ use yii\base\Controller;
 
 class ApiController extends Controller
 {
-    const STATUS_OK = 'ok';
-    const STATUS_FAIL = 'fail';
 
     /**
      * @param \yii\base\Action $action

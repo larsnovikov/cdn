@@ -51,18 +51,11 @@ $config = [
             'format' => yii\web\Response::FORMAT_JSON,
             'on beforeSend' => function ($event) {
                 $response = $event->sender;
-                $successCodes = [200, 301];
-                if (!\in_array($response->statusCode, $successCodes)) {
-                    $response->data = [
-                        'status' => \app\prototypes\ApiController::STATUS_FAIL,
-                        'content' => $response->data['message']
-                    ];
-                } else {
-                    $response->data = [
-                        'status' => \app\prototypes\ApiController::STATUS_OK,
-                        'content' => $response->data
-                    ];
-                }
+
+                $response->data = [
+                    'status' => $response->statusCode,
+                    'content' => $response->data
+                ];
             },
         ],
         'urlManager' => [
