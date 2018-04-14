@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Format;
 use app\models\Upload;
 use app\prototypes\ApiController;
+use app\queues\CropQueue;
 use app\validators\AddFormatValidator;
 use app\validators\RemoveFormatValidator;
 use app\validators\RemoveValidator;
@@ -28,11 +29,28 @@ class ImageController extends ApiController
 
         $formats = $request['formats'];
 
+        // определим тип обработки, через очередт или прямо в лоб
+        $queue = $request['queue'] ?? false;
+        
         $out = [];
-
         foreach ($formats as $format) {
-            $object = Upload::getObject(true, $request['source'], $format);
-            $out[$format['name']] = $object->build();
+            if ($queue) {
+                $filePath = Upload::getWebFilePath(
+                    $format['name'],
+                    Upload::getFileType($request['source'])
+                );
+                // пошлем в очередь
+                CropQueue::putInQueue(
+                    $request['source'],
+                    $filePath,
+                    $format['name']
+                );
+                $out[$format['name']] = $filePath;
+            } else {
+                // обработка в лоб
+                $object = Upload::getObject(true, $request['source'], $format);
+                $out[$format['name']] = $object->build();
+            }
         }
 
         return $out;

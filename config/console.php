@@ -6,7 +6,7 @@ $db = require __DIR__ . '/db-local.php';
 $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'cdnCropQueue'],
     'controllerNamespace' => 'app\commands',
     'components' => [
         'db' => $db,
@@ -21,15 +21,9 @@ $config = [
                 ],
             ],
         ],
+        'cdnCropQueue' => $params['cdn']['cropQueue'],
     ],
     'params' => $params,
-    /*
-    'controllerMap' => [
-        'fixture' => [ // Fixture generation command line.
-            'class' => 'yii\faker\FixtureController',
-        ],
-    ],
-    */
 ];
 
 if (YII_ENV_DEV) {
