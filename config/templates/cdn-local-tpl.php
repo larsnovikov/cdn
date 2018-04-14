@@ -7,7 +7,6 @@ $frontendIps = [
 
 // configure AMQP connection
 $cropQueue = [
-    'class' => \yii\queue\amqp_interop\Queue::class,
     'port' => 5672,
     'user' => 'public',
     'password' => 'public',

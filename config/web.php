@@ -78,7 +78,12 @@ $config = [
                 ],
             ],
         ],
-        'cdnCropQueue' => $params['cdn']['cropQueue'],
+        'cdnCropQueue' => array_merge(
+            [
+                'class' => \yii\queue\amqp_interop\Queue::class,
+            ],
+            $params['cdn']['cropQueue']
+        )
     ],
     'params' => $params,
 ];
