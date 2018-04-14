@@ -193,7 +193,11 @@ class Upload
         $calculationClass = new $this->calculationClass();
         $calculationClass->beforeExecution();
 
-        $this->webFilePath = self::getWebFilePath($this->format['name'], $this->fileType);
+        if ($webFileName !== null) {
+            $this->webFilePath = $webFileName;
+        } else {
+            $this->webFilePath = self::getWebFilePath($this->format['name'], $this->fileType);
+        }
 
         $this->outFileName = Storage::getFullPath($this->webFilePath);
     }
