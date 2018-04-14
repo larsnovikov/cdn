@@ -8,14 +8,34 @@ use yii\base\BaseObject;
 use yii\helpers\Console;
 
 /**
- * 
+ * Class CropQueue
+ * @package app\queues
  */
 class CropQueue extends BaseObject implements \yii\queue\JobInterface
 {
+    /**
+     * исходник
+     * @var string
+     */
     public $inputFile;
+
+    /**
+     * Выходной файл
+     * @var string
+     */
     public $outputFile;
+
+    /**
+     * Название формата
+     * @var string
+     */
     public $format;
 
+
+    /**
+     * Обработчик очереди
+     * @param string $queue
+     */
     public function execute($queue)
     {
         $format = Format::find()
@@ -32,7 +52,11 @@ class CropQueue extends BaseObject implements \yii\queue\JobInterface
     }
 
     /**
-     * 
+     * Положить в очередь
+     *
+     * @param string $inputFile
+     * @param string $outputFile
+     * @param string $format
      */
     public static function putInQueue(string $inputFile, string $outputFile, string $format)
     {

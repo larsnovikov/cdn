@@ -2,7 +2,6 @@
 
 namespace app\commands;
 
-use app\queues\CropQueue;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use yii\helpers\FileHelper;
