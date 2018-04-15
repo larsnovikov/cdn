@@ -109,17 +109,53 @@ class Upload
     private static $object = null;
 
     /**
+     *
+     */
+    public static function getSourcePath(string $source): string
+    {
+        return \Yii::$app->params['cdn']['inputPath'] . DIRECTORY_SEPARATOR . $source;
+    }
+
+    public static function getFileType(string $source)
+    {
+        return self::MIME_TYPE_MAP[mime_content_type(self::getSourcePath($source))];
+    }
+
+    public static function getWebFilePath(string $formatName, string $fileType)
+    {
+        return Storage::chooseStorage()
+        . DIRECTORY_SEPARATOR . $formatName
+        . '_' . time()
+        . '_' . rand(0, 99999)
+        . '.' . $fileType;
+    }
+
+
+    /**
+     *
+     */
+    public static function getOutFileName(string $formatName, string $source)
+    {
+        $fileType = self::getFileType($source);
+
+        $webFilePath = self::getWebFilePath($formatName, $fileType);
+
+        return Storage::getFullPath($webFilePath);
+    }
+
+    /**
      * Upload constructor.
      * @param string $source
      * @param array $format
+     * // TODO typehinting
      */
-    public function __construct(string $source, array $format)
+    public function __construct(string $source, array $format, $webFileName = null)
     {
         // пишем себя в атрибут
         self::$object = $this;
 
         // пишем путь к исходнику
-        $this->sourcePath = \Yii::$app->params['cdn']['inputPath'] . DIRECTORY_SEPARATOR . $source;
+        $this->sourcePath = self::getSourcePath($source);
 
         // пишем запрос формата
         $this->format = $format;
@@ -150,18 +186,18 @@ class Upload
             'height' => $this->format['height']
         ]);
 
-        $this->fileType = self::MIME_TYPE_MAP[mime_content_type($this->sourcePath)];
+        $this->fileType = self::getFileType($source);
 
         // выполняем предобработку
         /** @var Calc $calculationClass */
         $calculationClass = new $this->calculationClass();
         $calculationClass->beforeExecution();
 
-        $this->webFilePath = Storage::chooseStorage()
-            . DIRECTORY_SEPARATOR . $this->format['name']
-            . '_' . time()
-            . '_' . rand(0, 99999)
-            . '.' . $this->fileType;
+        if ($webFileName !== null) {
+            $this->webFilePath = $webFileName;
+        } else {
+            $this->webFilePath = self::getWebFilePath($this->format['name'], $this->fileType);
+        }
 
         $this->outFileName = Storage::getFullPath($this->webFilePath);
     }
@@ -173,11 +209,12 @@ class Upload
      * @param string $source
      * @param array $format
      * @return Upload|null
+     * //TODO typehinting
      */
-    public static function getObject(bool $force = false, string $source = '', array $format = [])
+    public static function getObject(bool $force = false, string $source = '', array $format = [], $webFileName = null)
     {
         if (self::$object === null || $force) {
-            self::$object = new self($source, $format);
+            self::$object = new self($source, $format, $webFileName);
         }
 
         return self::$object;
