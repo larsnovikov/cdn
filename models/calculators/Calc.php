@@ -19,20 +19,21 @@ abstract class Calc
      *
      * @return mixed
      */
-    public function beforeExecution(){}
+     public function beforeExecution()
+     {}
 
     /**
-     * @return mixed
+     * Увеличение
      */
-    public function maximize(){}
+     abstract public function maximize(): void;
 
     /**
-     * @return mixed
+     * Уменьшение
      */
-    public function minimaze(){}
+    abstract public function minimaze(): void;
 
     /**
-     * @return mixed
+     * Особое изменение размеров
      */
-    public function customize(){}
+    abstract public function customize(): void;
 }
