@@ -109,19 +109,35 @@ class Upload
     private static $object = null;
 
     /**
+     * Получить путь исходника
      *
+     * @param string $source
+     * @return string
      */
     public static function getSourcePath(string $source): string
     {
         return \Yii::$app->params['cdn']['inputPath'] . DIRECTORY_SEPARATOR . $source;
     }
 
-    public static function getFileType(string $source)
+    /**
+     * Получить тип файла
+     *
+     * @param string $source
+     * @return string
+     */
+    public static function getFileType(string $source): string
     {
         return self::MIME_TYPE_MAP[mime_content_type(self::getSourcePath($source))];
     }
 
-    public static function getWebFilePath(string $formatName, string $fileType)
+    /**
+     * Получить путь файла
+     *
+     * @param string $formatName
+     * @param string $fileType
+     * @return string
+     */
+    public static function getWebFilePath(string $formatName, string $fileType): string
     {
         return Storage::chooseStorage()
         . DIRECTORY_SEPARATOR . $formatName
@@ -132,9 +148,13 @@ class Upload
 
 
     /**
+     * Получить полный путь к файлу
      *
+     * @param string $formatName
+     * @param string $source
+     * @return string
      */
-    public static function getOutFileName(string $formatName, string $source)
+    public static function getOutFileName(string $formatName, string $source): string
     {
         $fileType = self::getFileType($source);
 
@@ -147,9 +167,9 @@ class Upload
      * Upload constructor.
      * @param string $source
      * @param array $format
-     * // TODO typehinting
+     * @param null|string $webFileName
      */
-    public function __construct(string $source, array $format, $webFileName = null)
+    public function __construct(string $source, array $format, ?string $webFileName = null)
     {
         // пишем себя в атрибут
         self::$object = $this;
@@ -208,10 +228,10 @@ class Upload
      * @param bool $force
      * @param string $source
      * @param array $format
+     * @param null|string $webFileName
      * @return Upload|null
-     * //TODO typehinting
      */
-    public static function getObject(bool $force = false, string $source = '', array $format = [], $webFileName = null)
+    public static function getObject(bool $force = false, string $source = '', array $format = [], ?string $webFileName = null)
     {
         if (self::$object === null || $force) {
             self::$object = new self($source, $format, $webFileName);

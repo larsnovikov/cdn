@@ -41,4 +41,3 @@ class Storage
         return \Yii::$app->params['cdn']['outputPath'] . DIRECTORY_SEPARATOR . $path;
     }
 }
-

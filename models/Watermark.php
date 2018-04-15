@@ -48,9 +48,9 @@ class Watermark
     ];
 
     /**
-     * @return \Imagine\Gd\Image|\Imagine\Image\ImageInterface
+     * Создание объекта
      */
-    public static function create()
+    public static function create(): void
     {
         $image = Upload::getObject()->image;
         $watermarkParams = Upload::getObject()->watermarkParams;

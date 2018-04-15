@@ -28,7 +28,7 @@ class WithoutMarginCalc extends Calc
     }
 
     /**
-     *
+     * Предобработка
      */
     public function beforeExecution(): void
     {

@@ -4,12 +4,17 @@ namespace app\prototypes;
 
 use yii\base\Controller;
 
+/**
+ * Class ApiController
+ * @package app\prototypes
+ */
 class ApiController extends Controller
 {
 
     /**
      * @param \yii\base\Action $action
      * @return bool
+     * @throws \yii\base\InvalidConfigException
      */
     public function beforeAction($action): bool
     {

@@ -36,7 +36,7 @@ class CropQueue extends BaseObject implements \yii\queue\JobInterface
      * Обработчик очереди
      * @param string $queue
      */
-    public function execute($queue)
+    public function execute($queue): void
     {
         $format = Format::find()
             ->where([
@@ -58,7 +58,7 @@ class CropQueue extends BaseObject implements \yii\queue\JobInterface
      * @param string $outputFile
      * @param string $format
      */
-    public static function putInQueue(string $inputFile, string $outputFile, string $format)
+    public static function putInQueue(string $inputFile, string $outputFile, string $format): void
     {
         \Yii::$app->cdnCropQueue->push(new self([
             'inputFile' => $inputFile,

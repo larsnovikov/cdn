@@ -72,9 +72,6 @@ class Calculate
     private static function margins(): void
     {
         $object = Upload::getObject();
-//        var_dump($object->format);
-//        var_dump($object->toParams);
-//        var_dump($object->fromParams);
         $object->params['param_2_margin'] = ($object->toParams['height'] - $object->params['param_2']) / 2;
         $object->params['param_1_margin'] = ($object->toParams['width'] - $object->params['param_1']) / 2;
     }

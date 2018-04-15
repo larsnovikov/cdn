@@ -55,7 +55,7 @@ class WithMarginCalc extends Calc
     }
 
     /**
-     *
+     * 
      */
     public function customize(): void
     {
