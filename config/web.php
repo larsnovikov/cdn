@@ -81,6 +81,7 @@ $config = [
         'cdnCropQueue' => array_merge(
             [
                 'class' => \yii\queue\amqp_interop\Queue::class,
+                'queueName' => 'cdn.crop.queue'
             ],
             $params['cdn']['cropQueue']
         )
