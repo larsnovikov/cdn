@@ -62,7 +62,7 @@ class WithMarginCalc extends Calc
         $fromCoef = Upload::getObject()->fromParams['width'] / Upload::getObject()->fromParams['height'];
         $toCoef = Upload::getObject()->toParams['width'] / Upload::getObject()->toParams['height'];
 
-        if ($toCoef <= 1) {
+        if ($toCoef <= 1 || $fromCoef > 1) {
             Upload::getObject()->params['param_1'] = Upload::getObject()->toParams['width'];
             Upload::getObject()->params['param_2'] = Upload::getObject()->toParams['width'] / $fromCoef;
         } else {

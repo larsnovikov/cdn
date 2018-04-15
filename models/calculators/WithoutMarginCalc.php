@@ -60,4 +60,16 @@ class WithoutMarginCalc extends Calc
         Upload::getObject()->params['param_1'] = $thumbWidth;
         Upload::getObject()->params['param_2'] = $thumbHeight;
     }
+
+    public function maximize(): void
+    {
+    }
+    
+    public function minimaze(): void
+    {
+    }
+
+    public function customize(): void
+    {
+    }
 }
