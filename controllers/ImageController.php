@@ -19,8 +19,9 @@ class ImageController extends ApiController
 {
     /**
      * Загрузка изображения
-     * 
+     *
      * @return array
+     * @throws \yii\base\Exception
      */
     public function actionUpload(): array
     {
@@ -129,6 +130,8 @@ class ImageController extends ApiController
             throw new \Exception('Can\'t remove file');
         }
 
-        return [];
+        return [
+            'message' => 'Image deleted'
+        ];
     }
 }
