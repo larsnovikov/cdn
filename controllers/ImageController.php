@@ -10,12 +10,13 @@ use app\validators\AddFormatValidator;
 use app\validators\RemoveFormatValidator;
 use app\validators\RemoveValidator;
 use app\validators\UploadValidator;
+use yii\base\Controller;
 
 /**
  * Class ImageController
  * @package app\controllers
  */
-class ImageController extends ApiController
+class ImageController extends Controller
 {
     /**
      * Загрузка изображения
