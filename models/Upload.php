@@ -16,7 +16,10 @@ use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Imagick\Imagine;
 
-
+/**
+ * Class Upload
+ * @package app\models
+ */
 class Upload
 {
     /**

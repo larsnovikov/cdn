@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use app\models\Format;
 use app\models\Upload;
-use app\prototypes\ApiController;
 use app\queues\CropQueue;
 use app\validators\AddFormatValidator;
 use app\validators\RemoveFormatValidator;

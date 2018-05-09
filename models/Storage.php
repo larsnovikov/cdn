@@ -4,6 +4,10 @@ namespace app\models;
 
 use Yii;
 
+/**
+ * Class Storage
+ * @package app\models
+ */
 class Storage
 {
     /**

@@ -19,7 +19,7 @@ class WithMarginCalc extends Calc
     /**
      * @return string
      */
-    public static function getClassName()
+    public static function getClassName(): string
     {
         return __CLASS__;
     }
